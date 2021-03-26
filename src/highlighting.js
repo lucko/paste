@@ -11,10 +11,12 @@ import 'prismjs/components/prism-go';
 import 'prismjs/components/prism-groovy';
 import 'prismjs/components/prism-haskell';
 import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-javastacktrace';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-kotlin';
 //import 'prismjs/components/prism-log';
+import './prism/prism-log'; // TODO replace with above once released
 import 'prismjs/components/prism-markdown';
 //import 'prismjs/components/prism-php';
 import 'prismjs/components/prism-protobuf';
@@ -40,9 +42,11 @@ export const languageIds = [
   'groovy',
   'haskell',
   'java',
+  'javastacktrace',
+  'javascript',
   'json',
   'kotlin',
-  //'log',
+  'log',
   'markdown',
   //'php',
   'protobuf',
