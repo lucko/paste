@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital@0;1&display=swap');
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+header {
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: 2em;
+  background: #025;
+  color: #adf;
+  display: flex;
+  justify-content: space-between;
+}
+
+header > div {
+  display: flex;
+  align-items: center;
+}
+
+header .button {
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 .25em;
+}
+
+header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header .button:hover {
+  background: #36368c;
+}
+
+header .button > ul {
+  position: absolute;
+  top: 2em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #36368c;
+}
+
+header .button > ul > li {
+  padding: .15em .5em;
+}
+
+header .button > ul > li:hover {
+  background-color: #025;
+}
+
+main {
+  padding-top: 2em;
+}
+
+.editor {
+  counter-reset: line;
+  font-size: 16px;
+  outline: 0;
+  min-height: calc(100vh - 2em);
+}
+
+.editor #code-area {
+  outline: none;
+  padding-left: 60px !important;
+}
+
+.editor pre {
+  padding-left: 60px !important;
+}
+
+.editor .editorLineNumber {
+  position: absolute;
+  left: 0px;
+  color: #cccccc;
+  text-align: right;
+  width: 40px;
+  font-weight: 100;
+}
