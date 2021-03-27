@@ -147,10 +147,18 @@ const MenuButton = ({ label, ids, value, setValue }) => {
   )
 }
 
+function langaugeToContentType(language) {
+  if (language === 'json') {
+    return 'application/json';
+  } else {
+    return 'text/' + language;
+  }
+}
+
 async function saveToBytebin(code, language) {
   try {
     const compressed = gzip(code);
-    const contentType = 'text/' + language;
+    const contentType = langaugeToContentType(language);
 
     const resp = await fetch('https://bytebin.lucko.me/post', {
       method: 'POST',

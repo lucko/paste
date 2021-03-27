@@ -17,19 +17,25 @@ async function loadFromBytebin(id) {
     const resp = await fetch('https://bytebin.lucko.me/' + id);
     if (resp.ok) {
       const content = await resp.text();
-      const { type, subtype: subType } = parseContentType(resp.headers.get('content-type'));
+      const type = parseLanguageFromContentType(resp.headers.get('content-type'));
       
       document.title = 'paste | ' + id;
-      if (type === 'text' && languageIds.includes(subType.toLowerCase())) {
-        return { ok: true, content, type: subType.toLowerCase() };
-      } else {
-        return { ok: true, content };
-      }
+      return { ok: true, content, type };
     } else {
       return { ok: false };
     }
   } catch (e) {
     return { ok: false };
+  }
+}
+
+function parseLanguageFromContentType(contentType) {
+  const { type, subtype: subType } = parseContentType(contentType);
+  if (type === 'application' && subType === 'json') {
+    return 'json';
+  }
+  if (type === 'text' && languageIds.includes(subType.toLowerCase())) {
+    return subType.toLowerCase();
   }
 }
 
