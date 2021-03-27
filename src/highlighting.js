@@ -36,7 +36,6 @@ export const languageIds = [
   'markup',
   'css',
   'clike',
-  'javascript',
   'bash',
   'diff',
   'docker',
