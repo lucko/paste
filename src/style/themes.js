@@ -26,9 +26,9 @@ const themes = {
     }
   },
   dark: {
-    primary: '#aaddff',
-    secondary: '#022550',
-    highlight: '#36368c',
+    primary: '#022550',
+    secondary: '#aaddff',
+    highlight: '#77c8f9',
 
     editor: {
       background: '#041f29',
