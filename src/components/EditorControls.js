@@ -15,6 +15,21 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
     setRecentlySaved(false);
   }, [code, language])
 
+  useEffect(() => {
+    const listener = (e) => {
+      if ((e.ctrlKey || e.metaKey)) {
+        if (e.key === 's' || e.key === 'S') {
+          e.preventDefault();
+          save();
+        }
+      }
+    }
+    
+    window.addEventListener('keydown', listener);
+    return () => window.removeEventListener('keydown', listener);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function save() {
     if (!code || recentlySaved) {
       return;
@@ -53,7 +68,6 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
         <MenuButton label="language" value={language} setValue={setLanguage} ids={languageIds} />
       </Section>
       <Section>
-        
         <MenuButton label="theme" value={theme} setValue={setTheme} ids={Object.keys(themes)} />
         <Button as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
       </Section>
