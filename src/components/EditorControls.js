@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { gzip } from 'pako';
 import history from 'history/browser';
@@ -8,7 +8,7 @@ import { MenuButton, Button } from './Menu';
 import { languageIds } from '../highlighting';
 import themes from '../style/themes';
 
-export default function EditorControls({ code, setCode, language, setLanguage, theme, setTheme }) {
+export default function EditorControls({ code, setCode, language, setLanguage, theme, setTheme, zoom }) {
   const [saving, setSaving] = useState(false);
   const [recentlySaved, setRecentlySaved] = useState(false);
 
@@ -16,22 +16,7 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
     setRecentlySaved(false);
   }, [code, language])
 
-  useEffect(() => {
-    const listener = (e) => {
-      if ((e.ctrlKey || e.metaKey)) {
-        if (e.key === 's' || e.key === 'S') {
-          e.preventDefault();
-          save();
-        }
-      }
-    }
-    
-    window.addEventListener('keydown', listener);
-    return () => window.removeEventListener('keydown', listener);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function save() {
+  const save = useCallback(() => {
     if (!code || recentlySaved) {
       return;
     }
@@ -45,7 +30,26 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
       copy(window.location.href);
       document.title = 'paste | ' + pasteId;
     });
-  }
+  }, [code, language, recentlySaved]);
+
+  useEffect(() => {
+    const listener = (e) => {
+      if ((e.ctrlKey || e.metaKey)) {
+        if (e.key === 's' || e.key === 'S') {
+          e.preventDefault();
+          save();
+        }
+
+        if (e.key === '=' || e.key === '-') {
+          e.preventDefault();
+          zoom(e.key === '=' ? 1 : -1);
+        }
+      }
+    }
+    
+    window.addEventListener('keydown', listener);
+    return () => window.removeEventListener('keydown', listener);
+  }, [save, zoom]);
 
   function reset() {
     setCode('');
@@ -69,6 +73,8 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
         <MenuButton label="language" value={language} setValue={setLanguage} ids={languageIds} />
       </Section>
       <Section>
+        <Button onClick={() => zoom(1)}>[+ </Button>
+          <Button onClick={() => zoom(-1)}> -]</Button>
         <MenuButton label="theme" value={theme} setValue={setTheme} ids={Object.keys(themes)} />
         <Button as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
       </Section>
@@ -85,6 +91,7 @@ const Header = styled.header`
   background: ${props => props.theme.secondary};
   display: flex;
   justify-content: space-between;
+  user-select: none;
 `;
 
 const Section = styled.div`

@@ -3,7 +3,7 @@ import ReactEditor from 'react-simple-code-editor';
 import EditorPrismStyle from './EditorPrismStyle';
 import { getHighlighter } from '../highlighting';
 
-export default function EditorTextArea({ code, setCode, language }) {
+export default function EditorTextArea({ code, setCode, language, fontSize }) {
   const highlight = getHighlighter(language);
 
   function highlightWithLineNumbers(input, grammar) {
@@ -21,6 +21,7 @@ export default function EditorTextArea({ code, setCode, language }) {
         highlight={highlightWithLineNumbers}
         placeholder={'Type some code...'}
         padding={10}
+        size={fontSize}
         textareaId='code-area'
       />
     </EditorPrismStyle>
@@ -29,9 +30,9 @@ export default function EditorTextArea({ code, setCode, language }) {
 
 const StyledReactEditor = styled(ReactEditor)`
   counter-reset: line;
-  font-size: 16px;
+  font-size: ${props => props.size}px;
   outline: 0;
-  min-height: calc(100vh - 2em);
+  min-height: calc(100vh - 2rem);
 
   #code-area {
     outline: none;

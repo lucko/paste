@@ -16,6 +16,14 @@ export default function Editor({ content, setContent, contentType }) {
       return 'dark';
     }
   });
+  const [fontSize, setFontSize] = useState(() => {
+    const preference = ls.get('fontsize');
+    if (preference && preference >= 10 && preference <= 22) {
+      return preference;
+    } else {
+      return 16;
+    }
+  });
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -23,7 +31,15 @@ export default function Editor({ content, setContent, contentType }) {
     } else {
       ls.set('theme', theme);
     }
-  }, [theme])
+  }, [theme]);
+
+  useEffect(() => {
+    if (fontSize === 16) {
+      ls.remove('fontsize');
+    } else {
+      ls.set('fontsize', fontSize);
+    }
+  }, [fontSize]);
 
   useEffect(() => {
     if (contentType) {
@@ -31,10 +47,22 @@ export default function Editor({ content, setContent, contentType }) {
     }
   }, [contentType]);
 
+  function zoom(delta) {
+    const result = fontSize + delta;
+    if (result && result >= 10 && result <= 22) {
+      setFontSize(result);
+    }
+  }
+
   return <>
     <ThemeProvider theme={themes[theme]}>
-      <EditorControls code={content} setCode={setContent} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} />
-      <EditorTextArea code={content} setCode={setContent} language={language} />
+      <EditorControls
+        code={content} setCode={setContent}
+        language={language} setLanguage={setLanguage}
+        theme={theme} setTheme={setTheme}
+        zoom={zoom}
+      />
+      <EditorTextArea code={content} setCode={setContent} language={language} fontSize={fontSize} />
     </ThemeProvider>
   </>
 }
