@@ -23,6 +23,7 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
         padding={10}
         size={fontSize}
         textareaId='code-area'
+        autoFocus={true}
       />
     </EditorPrismStyle>
   )
@@ -50,5 +51,6 @@ const StyledReactEditor = styled(ReactEditor)`
     text-align: right;
     width: 40px;
     font-weight: 100;
+    user-select: none;
   }
 `;
