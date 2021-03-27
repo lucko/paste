@@ -52,7 +52,7 @@ export default function App() {
   useEffect(() => {
     if (pasteId && state === INITIAL) {
       setState(LOADING);
-      setContent('// Loading, please wait...')
+      setContent('Loading...')
       loadFromBytebin(pasteId).then(({ ok, content, type }) => {
         if (ok) {
           setContent(content);
@@ -60,7 +60,7 @@ export default function App() {
             setContentType(type);
           }
         } else {
-          setContent('// Unable to load a paste with the id \'' + pasteId + '\'\n// Are you sure it exists? Maybe it expired?');
+          setContent(get404Message(pasteId));
         }
         setState(LOADED);
       })
@@ -68,4 +68,18 @@ export default function App() {
   }, [pasteId, state, setContent])
 
   return <Editor content={content} setContent={setContent} contentType={contentType} />;
+}
+
+function get404Message(pasteId) {
+  return `
+  ██╗  ██╗ ██████╗ ██╗  ██╗
+  ██║  ██║██╔═████╗██║  ██║
+  ███████║██║██╔██║███████║
+  ╚════██║████╔╝██║╚════██║
+       ██║╚██████╔╝     ██║
+       ╚═╝ ╚═════╝      ╚═╝
+
+  not found: '${pasteId}'
+  maybe the paste expired?
+`;
 }
