@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 import { languageIds } from '../highlighting';
 import themes from '../style/themes';
 
-export default function EditorControls({ code, language, setLanguage, theme, setTheme }) {
+export default function EditorControls({ code, setCode, language, setLanguage, theme, setTheme }) {
   const [saving, setSaving] = useState(false);
   const [recentlySaved, setRecentlySaved] = useState(false);
 
@@ -24,17 +24,26 @@ export default function EditorControls({ code, language, setLanguage, theme, set
       setSaving(false);
       setRecentlySaved(true);
       history.replace({
-        pathname: pasteId,
-        hash: ''
+        pathname: pasteId
       });
       copy(window.location.href);
       document.title = 'paste | ' + pasteId;
     });
   }
 
+  function reset() {
+    setCode('');
+    setLanguage('plain');
+    history.replace({
+      pathname: '/'
+    });
+    document.title = 'paste';
+  }
+
   return (
     <Header>
       <Section>
+        <Button onClick={reset}>[new]</Button>
         <Button onClick={save}>
           {recentlySaved
             ? '[link copied!]'
@@ -44,6 +53,7 @@ export default function EditorControls({ code, language, setLanguage, theme, set
         <MenuButton label="language" value={language} setValue={setLanguage} ids={languageIds} />
       </Section>
       <Section>
+        
         <MenuButton label="theme" value={theme} setValue={setTheme} ids={Object.keys(themes)} />
         <Button as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
       </Section>

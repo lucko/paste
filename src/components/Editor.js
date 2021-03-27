@@ -33,7 +33,7 @@ export default function Editor({ content, setContent, contentType }) {
 
   return <>
     <ThemeProvider theme={themes[theme]}>
-      <EditorControls code={content} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} />
+      <EditorControls code={content} setCode={setContent} language={language} setLanguage={setLanguage} theme={theme} setTheme={setTheme} />
       <EditorTextArea code={content} setCode={setContent} language={language} />
     </ThemeProvider>
   </>
