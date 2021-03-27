@@ -1,7 +1,7 @@
+import styled from 'styled-components';
 import ReactEditor from 'react-simple-code-editor';
+import EditorPrismStyle from './EditorPrismStyle';
 import { getHighlighter } from '../highlighting';
-
-import 'prismjs/themes/prism.css';
 
 export default function EditorTextArea({ code, setCode, language }) {
   const highlight = getHighlighter(language);
@@ -14,16 +14,40 @@ export default function EditorTextArea({ code, setCode, language }) {
   }
 
   return (
-    <main>
-      <ReactEditor
+    <EditorPrismStyle>
+      <StyledReactEditor
         value={code}
         onValueChange={setCode}
         highlight={highlightWithLineNumbers}
         placeholder={'Type some code...'}
         padding={10}
         textareaId='code-area'
-        className='editor'
       />
-    </main>
+    </EditorPrismStyle>
   )
 }
+
+const StyledReactEditor = styled(ReactEditor)`
+  counter-reset: line;
+  font-size: 16px;
+  outline: 0;
+  min-height: calc(100vh - 2em);
+
+  #code-area {
+    outline: none;
+    padding-left: 60px !important;
+  }
+
+  pre {
+    padding-left: 60px !important;
+  }
+
+  .editorLineNumber {
+    position: absolute;
+    left: 0px;
+    color: ${props => props.theme.editor.lineNumber};
+    text-align: right;
+    width: 40px;
+    font-weight: 100;
+  }
+`;

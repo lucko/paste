@@ -11,6 +11,8 @@ import 'prismjs/components/prism-go';
 import 'prismjs/components/prism-groovy';
 import 'prismjs/components/prism-haskell';
 import 'prismjs/components/prism-java';
+import 'prismjs/components/prism-javadoclike';
+import 'prismjs/components/prism-javadoc';
 import 'prismjs/components/prism-javastacktrace';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-json';
@@ -61,6 +63,6 @@ export const languageIds = [
 ]
 
 export function getHighlighter(language) {
-  const grammar = language === 'plain' ? {} : languages[language];
+  const grammar = languages[language] || {};
   return (input) => highlight(input, grammar);
 }

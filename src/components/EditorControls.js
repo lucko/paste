@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { languageIds } from '../highlighting';
+import styled from 'styled-components';
 import { gzip } from 'pako';
 import history from 'history/browser';
 import copy from 'copy-to-clipboard';
 
-export default function EditorControls({ code, language, setLanguage }) {
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
+import { languageIds } from '../highlighting';
+import themes from '../style/themes';
+
+export default function EditorControls({ code, language, setLanguage, theme, setTheme }) {
   const [saving, setSaving] = useState(false);
   const [recentlySaved, setRecentlySaved] = useState(false);
 
@@ -30,39 +32,94 @@ export default function EditorControls({ code, language, setLanguage }) {
     });
   }
 
-  function toggleLangMenu() {
-    setLangMenuOpen(!langMenuOpen);
-  }
-
-  function selectLanguage(e, language) {
-    e.stopPropagation();
-    setLangMenuOpen(false);
-    setLanguage(language);
-  }
-
   return (
-    <header>
-      <div className="section">
-        <div className="button" onClick={save}>
+    <Header>
+      <Section>
+        <Button onClick={save}>
           {recentlySaved
             ? '[link copied!]'
             : saving ? '[saving...]' : '[save]'
           }
-        </div>
-        <div className="button" onClick={toggleLangMenu}>
-          [language: {language}]
-          {langMenuOpen && (
-            <ul>  
-              {languageIds.map(id => <li key={id} onClick={e => selectLanguage(e, id)}>{id}</li>)}
-            </ul>
-          )}
-        </div>
-      </div>
-      <div className="section">
-        <a className="button" href="https://bytebin.lucko.me/" target="_blank" rel="noreferrer">[not pasting code?]</a>
-        <a className="button" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about paste]</a>
-      </div>
-    </header>
+        </Button>
+        <MenuButton label="language" value={language} setValue={setLanguage} ids={languageIds} />
+      </Section>
+      <Section>
+        <MenuButton label="theme" value={theme} setValue={setTheme} ids={Object.keys(themes)} />
+        <Button as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
+      </Section>
+    </Header>
+  )
+}
+
+const Header = styled.header`
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  height: 2em;
+  color: ${props => props.theme.primary};
+  background: ${props => props.theme.secondary};
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Section = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Button = styled.div`
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 .25em;
+  color: inherit;
+  text-decoration: none;
+
+  :hover {
+    background: ${props => props.theme.highlight};
+  }
+`;
+
+const Menu = styled.ul`
+  position: absolute;
+  top: 2em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: ${props => props.theme.highlight};
+
+  > li {
+    padding: .15em .5em;
+  }
+
+  > li:hover {
+    background-color: ${props => props.theme.secondary};
+  }
+`;
+
+const MenuButton = ({ label, ids, value, setValue }) => {
+  const [open, setOpen] = useState(false);
+
+  function toggleOpen() {
+    setOpen(!open);
+  }
+
+  function select(e, id) {
+    e.stopPropagation();
+    setOpen(false);
+    setValue(id);
+  }
+
+  return (
+    <Button onClick={toggleOpen}>
+      [{label}: {value}]
+      {open && (
+        <Menu>  
+          {ids.map(id => <li key={id} onClick={e => select(e, id)}>{id}</li>)}
+        </Menu>
+      )}
+    </Button>
   )
 }
 
