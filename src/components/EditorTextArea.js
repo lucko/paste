@@ -19,7 +19,7 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
         value={code}
         onValueChange={setCode}
         highlight={highlightWithLineNumbers}
-        placeholder={'Type some code...'}
+        placeholder={'Paste (or type) some code...'}
         padding={10}
         size={fontSize}
         textareaId='code-area'

@@ -76,7 +76,7 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
         <Button onClick={() => zoom(1)}>[+ </Button>
         <Button onClick={() => zoom(-1)}> -]</Button>
         <MenuButton label="theme" value={theme} setValue={setTheme} ids={Object.keys(themes)} />
-        <Button as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
+        <Button className="optional" as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
       </Section>
     </Header>
   )
@@ -97,6 +97,12 @@ const Header = styled.header`
 const Section = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 470px) {
+    .optional {
+      display: none;
+    }
+  }
 `;
 
 function langaugeToContentType(language) {

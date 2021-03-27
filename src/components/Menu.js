@@ -13,6 +13,12 @@ export const Button = styled.div`
   :hover {
     background: ${props => props.theme.highlight};
   }
+
+  @media (max-width: 640px) {
+    span {
+      display: none;
+    }
+  }
 `;
 
 const Menu = styled.ul`
@@ -57,7 +63,7 @@ export const MenuButton = ({ label, ids, value, setValue }) => {
 
   return (
     <Button onClick={toggleOpen}>
-      [{label}: {value}]
+      [<span>{label}: </span>{value}]
       {open && (
         <Menu>  
           {ids.map(id => <li key={id} onClick={e => select(e, id)}>{id}</li>)}
