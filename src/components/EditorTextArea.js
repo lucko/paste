@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
 import ReactEditor from 'react-simple-code-editor';
 import EditorPrismStyle from './EditorPrismStyle';
@@ -13,9 +14,15 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
       .join('\n');
   }
 
+  const editorRef = useRef();
+  function keydown(e) {
+    handleKeydown(e, editorRef.current);
+  }
+
   return (
     <EditorPrismStyle>
       <StyledReactEditor
+        ref={editorRef}
         value={code}
         onValueChange={setCode}
         highlight={highlightWithLineNumbers}
@@ -24,6 +31,7 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
         size={fontSize}
         textareaId='code-area'
         autoFocus={true}
+        onKeyDown={keydown}
       />
     </EditorPrismStyle>
   )
@@ -54,3 +62,68 @@ const StyledReactEditor = styled(ReactEditor)`
     user-select: none;
   }
 `;
+
+const KEYCODE_ENTER = 13;
+const KEYCODE_PARENS = 57;
+const KEYCODE_BRACKETS = 219;
+const KEYCODE_QUOTE = 222;
+const KEYCODE_BACK_QUOTE = 192;
+
+function getPair(e) {
+  if (e.keyCode === KEYCODE_PARENS && e.shiftKey) {
+    return ['(', ')'];
+  } else if (e.keyCode === KEYCODE_BRACKETS) {
+    if (e.shiftKey) {
+      return ['{', '}'];
+    } else {
+      return ['[', ']'];
+    }
+  } else if (e.keyCode === KEYCODE_QUOTE) {
+    if (e.shiftKey) {
+      return ['"', '"'];
+    } else {
+      return ["'", "'"];
+    }
+  } else if (e.keyCode === KEYCODE_BACK_QUOTE && !e.shiftKey) {
+    return ['`', '`'];
+  }
+  return null;
+}
+
+function handleKeydown(e, editor) {
+  const { value, selectionStart, selectionEnd } = e.target;
+  if (selectionStart !== selectionEnd) {
+    return;
+  }
+
+  // When entering an open bracket/quote, add the closing one
+  const pair = getPair(e);
+  if (pair) {
+    e.preventDefault();
+    editor._applyEdits({
+      value: value.substring(0, selectionStart) + pair[0] + pair[1] + value.substring(selectionEnd),
+      selectionStart: selectionStart + 1,
+      selectionEnd: selectionStart + 1
+    });
+  }
+
+  // When pressing enter immediately after an open bracket, automatically add a newline plus extra indent
+  if (e.keyCode === KEYCODE_ENTER && selectionEnd !== 0 && value[selectionEnd - 1] === '{') {
+    const line = editor._getLines(value, selectionStart).pop();
+    const matches = line.match(/^\s+/);
+    const existingIndent = (matches ? matches[0] : '');
+
+    const indent = '  ';
+    const updatedValue = value.substring(0, selectionStart) +
+      '\n' + existingIndent + indent +
+      '\n' + existingIndent + value.substring(selectionEnd);
+    const updatedSelection = selectionStart + 1 /* newline */ + existingIndent.length + indent.length;
+
+    e.preventDefault();
+    editor._applyEdits({
+      value: updatedValue,
+      selectionStart: updatedSelection,
+      selectionEnd: updatedSelection
+    })
+  }
+}
