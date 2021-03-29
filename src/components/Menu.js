@@ -28,6 +28,8 @@ const Menu = styled.ul`
   padding: 0;
   list-style: none;
   background-color: ${props => props.theme.highlight};
+  max-height: 90vh;
+  overflow: auto;
 
   > li {
     padding: .15em .5em;
