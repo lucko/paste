@@ -28,7 +28,7 @@ const Menu = styled.ul`
   padding: 0;
   list-style: none;
   background-color: ${props => props.theme.highlight};
-  max-height: 90vh;
+  max-height: calc(100vh - 2em);
   overflow: auto;
 
   > li {
