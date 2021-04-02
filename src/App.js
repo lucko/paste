@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Editor from './components/Editor';
 import parseContentType from 'content-type-parser';
-import { languageIds } from './highlighting';
+import { languageIds } from './util/highlighting';
 
 function getPasteIdFromUrl() {
   const path = window.location.pathname;

@@ -5,7 +5,7 @@ import history from 'history/browser';
 import copy from 'copy-to-clipboard';
 
 import { MenuButton, Button } from './Menu';
-import { languageIds } from '../highlighting';
+import { languageIds } from '../util/highlighting';
 import themes from '../style/themes';
 
 export default function EditorControls({

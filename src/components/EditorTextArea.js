@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 import ReactEditor from 'react-simple-code-editor';
 import EditorPrismStyle from './EditorPrismStyle';
-import { getHighlighter } from '../highlighting';
+import { getHighlighter } from '../util/highlighting';
 
 export default function EditorTextArea({ code, setCode, language, fontSize }) {
   const highlight = getHighlighter(language);
