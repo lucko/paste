@@ -17,8 +17,10 @@ async function loadFromBytebin(id) {
     const resp = await fetch('https://bytebin.lucko.me/' + id);
     if (resp.ok) {
       const content = await resp.text();
-      const type = parseLanguageFromContentType(resp.headers.get('content-type'));
-      
+      const type = parseLanguageFromContentType(
+        resp.headers.get('content-type')
+      );
+
       document.title = 'paste | ' + id;
       return { ok: true, content, type };
     } else {
@@ -52,7 +54,7 @@ export default function App() {
   useEffect(() => {
     if (pasteId && state === INITIAL) {
       setState(LOADING);
-      setContent('Loading...')
+      setContent('Loading...');
       loadFromBytebin(pasteId).then(({ ok, content, type }) => {
         if (ok) {
           setContent(content);
@@ -63,11 +65,17 @@ export default function App() {
           setContent(get404Message(pasteId));
         }
         setState(LOADED);
-      })
+      });
     }
-  }, [pasteId, state, setContent])
+  }, [pasteId, state, setContent]);
 
-  return <Editor content={content} setContent={setContent} contentType={contentType} />;
+  return (
+    <Editor
+      content={content}
+      setContent={setContent}
+      contentType={contentType}
+    />
+  );
 }
 
 function get404Message(pasteId) {

@@ -22,8 +22,8 @@ const themes = {
       keyword: '#07a',
       function: '#DD4A68',
       className: '#DD4A68',
-      variable: '#e90'
-    }
+      variable: '#e90',
+    },
   },
   dark: {
     primary: '#022550',
@@ -48,9 +48,9 @@ const themes = {
       keyword: '#1CCBEF',
       function: '#BCBCBC',
       className: '#82CF75',
-      variable: '#ee9900'
-    }
-  }
+      variable: '#ee9900',
+    },
+  },
 };
 
 export default themes;

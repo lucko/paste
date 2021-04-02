@@ -18,7 +18,7 @@ import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-kotlin';
 //import 'prismjs/components/prism-log';
-import './prism/prism-log'; // TODO replace with above once released
+import '../prism/prism-log'; // TODO replace with above once released
 import 'prismjs/components/prism-markdown';
 //import 'prismjs/components/prism-php';
 import 'prismjs/components/prism-protobuf';
@@ -58,10 +58,10 @@ export const languageIds = [
   'rust',
   'sql',
   'toml',
-  'yaml'
-]
+  'yaml',
+];
 
 export function getHighlighter(language) {
   const grammar = languages[language] || {};
-  return (input) => highlight(input, grammar);
+  return input => highlight(input, grammar);
 }

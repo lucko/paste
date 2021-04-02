@@ -8,24 +8,32 @@ import { MenuButton, Button } from './Menu';
 import { languageIds } from '../highlighting';
 import themes from '../style/themes';
 
-export default function EditorControls({ code, setCode, language, setLanguage, theme, setTheme, zoom }) {
+export default function EditorControls({
+  code,
+  setCode,
+  language,
+  setLanguage,
+  theme,
+  setTheme,
+  zoom,
+}) {
   const [saving, setSaving] = useState(false);
   const [recentlySaved, setRecentlySaved] = useState(false);
 
   useEffect(() => {
     setRecentlySaved(false);
-  }, [code, language])
+  }, [code, language]);
 
   const save = useCallback(() => {
     if (!code || recentlySaved) {
       return;
     }
     setSaving(true);
-    saveToBytebin(code, language).then((pasteId) => {
+    saveToBytebin(code, language).then(pasteId => {
       setSaving(false);
       setRecentlySaved(true);
       history.replace({
-        pathname: pasteId
+        pathname: pasteId,
       });
       copy(window.location.href);
       document.title = 'paste | ' + pasteId;
@@ -33,8 +41,8 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
   }, [code, language, recentlySaved]);
 
   useEffect(() => {
-    const listener = (e) => {
-      if ((e.ctrlKey || e.metaKey)) {
+    const listener = e => {
+      if (e.ctrlKey || e.metaKey) {
         if (e.key === 's' || e.key === 'S') {
           e.preventDefault();
           save();
@@ -45,8 +53,8 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
           zoom(e.key === '=' ? 1 : -1);
         }
       }
-    }
-    
+    };
+
     window.addEventListener('keydown', listener);
     return () => window.removeEventListener('keydown', listener);
   }, [save, zoom]);
@@ -55,7 +63,7 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
     setCode('');
     setLanguage('plain');
     history.replace({
-      pathname: '/'
+      pathname: '/',
     });
     document.title = 'paste';
   }
@@ -65,21 +73,36 @@ export default function EditorControls({ code, setCode, language, setLanguage, t
       <Section>
         <Button onClick={reset}>[new]</Button>
         <Button onClick={save}>
-          {recentlySaved
-            ? '[link copied!]'
-            : saving ? '[saving...]' : '[save]'
-          }
+          {recentlySaved ? '[link copied!]' : saving ? '[saving...]' : '[save]'}
         </Button>
-        <MenuButton label="language" value={language} setValue={setLanguage} ids={languageIds} />
+        <MenuButton
+          label="language"
+          value={language}
+          setValue={setLanguage}
+          ids={languageIds}
+        />
       </Section>
       <Section>
         <Button onClick={() => zoom(1)}>[+ </Button>
         <Button onClick={() => zoom(-1)}> -]</Button>
-        <MenuButton label="theme" value={theme} setValue={setTheme} ids={Object.keys(themes)} />
-        <Button className="optional" as="a" href="https://github.com/lucko/paste" target="_blank" rel="noreferrer">[about]</Button>
+        <MenuButton
+          label="theme"
+          value={theme}
+          setValue={setTheme}
+          ids={Object.keys(themes)}
+        />
+        <Button
+          className="optional"
+          as="a"
+          href="https://github.com/lucko/paste"
+          target="_blank"
+          rel="noreferrer"
+        >
+          [about]
+        </Button>
       </Section>
     </Header>
-  )
+  );
 }
 
 const Header = styled.header`
@@ -123,9 +146,9 @@ async function saveToBytebin(code, language) {
       headers: {
         'Content-Type': contentType,
         'Content-Encoding': 'gzip',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
       },
-      body: compressed
+      body: compressed,
     });
 
     if (resp.ok) {

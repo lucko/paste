@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export default function EditorPrismStyle({ children }) {
-  return <Main>{children}</Main>
+  return <Main>{children}</Main>;
 }
 
 const Main = styled.main`
@@ -9,8 +9,8 @@ const Main = styled.main`
   color: ${props => props.theme.editor.primary};
   background: ${props => props.theme.editor.background};
 
-  code[class*="language-"],
-  pre[class*="language-"] {
+  code[class*='language-'],
+  pre[class*='language-'] {
     text-shadow: 0 1px white;
     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     font-size: 1em;
@@ -31,29 +31,33 @@ const Main = styled.main`
     hyphens: none;
   }
 
-  pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-  code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  pre[class*='language-']::-moz-selection,
+  pre[class*='language-'] ::-moz-selection,
+  code[class*='language-']::-moz-selection,
+  code[class*='language-'] ::-moz-selection {
     text-shadow: none;
     background: ${props => props.theme.editor.selection};
   }
 
-  pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-  code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  pre[class*='language-']::selection,
+  pre[class*='language-'] ::selection,
+  code[class*='language-']::selection,
+  code[class*='language-'] ::selection {
     text-shadow: none;
     background: ${props => props.theme.editor.selection};
   }
 
   @media print {
-    code[class*="language-"],
-    pre[class*="language-"] {
+    code[class*='language-'],
+    pre[class*='language-'] {
       text-shadow: none;
     }
   }
 
   /* Code blocks */
-  pre[class*="language-"] {
+  pre[class*='language-'] {
     padding: 1em;
-    margin: .5em 0;
+    margin: 0.5em 0;
     overflow: auto;
   }
 
@@ -84,7 +88,7 @@ const Main = styled.main`
   .token.boolean {
     color: ${props => props.theme.editor.keyword};
   }
-  
+
   .token.constant {
     color: ${props => props.theme.editor.constant};
   }

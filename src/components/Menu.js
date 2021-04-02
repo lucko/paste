@@ -6,7 +6,7 @@ export const Button = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 0 .25em;
+  padding: 0 0.25em;
   color: inherit;
   text-decoration: none;
 
@@ -32,7 +32,7 @@ const Menu = styled.ul`
   overflow: auto;
 
   > li {
-    padding: .15em .5em;
+    padding: 0.15em 0.5em;
   }
 
   > li:hover {
@@ -48,7 +48,7 @@ export const MenuButton = ({ label, ids, value, setValue }) => {
       return;
     }
 
-    const listener = (e) => setOpen(false);
+    const listener = e => setOpen(false);
     window.addEventListener('click', listener);
     return () => window.removeEventListener('click', listener);
   }, [open, setOpen]);
@@ -65,12 +65,17 @@ export const MenuButton = ({ label, ids, value, setValue }) => {
 
   return (
     <Button onClick={toggleOpen}>
-      [<span>{label}: </span>{value}]
+      [<span>{label}: </span>
+      {value}]
       {open && (
-        <Menu>  
-          {ids.map(id => <li key={id} onClick={e => select(e, id)}>{id}</li>)}
+        <Menu>
+          {ids.map(id => (
+            <li key={id} onClick={e => select(e, id)}>
+              {id}
+            </li>
+          ))}
         </Menu>
       )}
     </Button>
-  )
-}
+  );
+};

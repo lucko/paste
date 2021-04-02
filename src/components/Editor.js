@@ -8,38 +8,16 @@ import themes from '../style/themes';
 
 export default function Editor({ content, setContent, contentType }) {
   const [language, setLanguage] = useState('plain');
-  const [theme, setTheme] = useState(() => {
-    const preference = ls.get('theme');
-    if (preference && themes[preference]) {
-      return preference;
-    } else {
-      return 'dark';
-    }
-  });
-  const [fontSize, setFontSize] = useState(() => {
-    const preference = ls.get('fontsize');
-    if (preference && preference >= 10 && preference <= 22) {
-      return preference;
-    } else {
-      return 16;
-    }
-  });
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      ls.remove('theme');
-    } else {
-      ls.set('theme', theme);
-    }
-  }, [theme]);
-
-  useEffect(() => {
-    if (fontSize === 16) {
-      ls.remove('fontsize');
-    } else {
-      ls.set('fontsize', fontSize);
-    }
-  }, [fontSize]);
+  const [theme, setTheme] = usePreference(
+    'theme',
+    'dark',
+    pref => !!themes[pref]
+  );
+  const [fontSize, setFontSize, fontSizeCheck] = usePreference(
+    'fontsize',
+    16,
+    pref => pref >= 10 && pref <= 22
+  );
 
   useEffect(() => {
     if (contentType) {
@@ -48,21 +26,53 @@ export default function Editor({ content, setContent, contentType }) {
   }, [contentType]);
 
   function zoom(delta) {
-    const result = fontSize + delta;
-    if (result && result >= 10 && result <= 22) {
-      setFontSize(result);
+    const newFontSize = fontSize + delta;
+    if (fontSizeCheck(newFontSize)) {
+      setFontSize(newFontSize);
     }
   }
 
-  return <>
-    <ThemeProvider theme={themes[theme]}>
-      <EditorControls
-        code={content} setCode={setContent}
-        language={language} setLanguage={setLanguage}
-        theme={theme} setTheme={setTheme}
-        zoom={zoom}
-      />
-      <EditorTextArea code={content} setCode={setContent} language={language} fontSize={fontSize} />
-    </ThemeProvider>
-  </>
+  return (
+    <>
+      <ThemeProvider theme={themes[theme]}>
+        <EditorControls
+          code={content}
+          setCode={setContent}
+          language={language}
+          setLanguage={setLanguage}
+          theme={theme}
+          setTheme={setTheme}
+          zoom={zoom}
+        />
+        <EditorTextArea
+          code={content}
+          setCode={setContent}
+          language={language}
+          fontSize={fontSize}
+        />
+      </ThemeProvider>
+    </>
+  );
+}
+
+// hook used to load "preference" settings from local storage, or fall back to a default value.
+function usePreference(id, defaultValue, valid) {
+  const [value, setValue] = useState(() => {
+    const pref = ls.get(id);
+    if (pref && valid(pref)) {
+      return pref;
+    } else {
+      return defaultValue;
+    }
+  });
+
+  useEffect(() => {
+    if (value === defaultValue) {
+      ls.remove(id);
+    } else {
+      ls.set(id, value);
+    }
+  }, [value, id, defaultValue]);
+
+  return [value, setValue, valid];
 }
