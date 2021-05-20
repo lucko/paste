@@ -14,10 +14,10 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
       .join('\n');
   }
 
-  const lastBracketState = useState(null);
+  const autoBracketState = useState(null);
   const editorRef = useRef();
   function keydown(e) {
-    handleKeydown(e, editorRef.current, lastBracketState);
+    handleKeydown(e, editorRef.current, autoBracketState);
   }
 
   return (
