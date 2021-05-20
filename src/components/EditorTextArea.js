@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import ReactEditor from 'react-simple-code-editor';
 import EditorPrismStyle from './EditorPrismStyle';
@@ -14,9 +14,10 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
       .join('\n');
   }
 
+  const lastBracketState = useState(null);
   const editorRef = useRef();
   function keydown(e) {
-    handleKeydown(e, editorRef.current);
+    handleKeydown(e, editorRef.current, lastBracketState);
   }
 
   return (
@@ -65,40 +66,71 @@ const StyledReactEditor = styled(ReactEditor)`
 
 const KEYCODE_ENTER = 13;
 const KEYCODE_PARENS = 57;
+const KEYCODE_PARENS_CLOSE = 48;
 const KEYCODE_BRACKETS = 219;
+const KEYCODE_BRACKETS_CLOSE = 221;
 const KEYCODE_QUOTE = 222;
 const KEYCODE_BACK_QUOTE = 192;
 
-function getPair(e) {
-  if (e.keyCode === KEYCODE_PARENS && e.shiftKey) {
+function getPair({ keyCode, shiftKey }) {
+  if (keyCode === KEYCODE_PARENS && shiftKey) {
     return ['(', ')'];
-  } else if (e.keyCode === KEYCODE_BRACKETS) {
-    if (e.shiftKey) {
+  } else if (keyCode === KEYCODE_BRACKETS) {
+    if (shiftKey) {
       return ['{', '}'];
     } else {
       return ['[', ']'];
     }
-  } else if (e.keyCode === KEYCODE_QUOTE) {
-    if (e.shiftKey) {
+  } else if (keyCode === KEYCODE_QUOTE) {
+    if (shiftKey) {
       return ['"', '"'];
     } else {
       return ["'", "'"];
     }
-  } else if (e.keyCode === KEYCODE_BACK_QUOTE && !e.shiftKey) {
+  } else if (keyCode === KEYCODE_BACK_QUOTE && !shiftKey) {
     return ['`', '`'];
   }
   return null;
 }
 
-function handleKeydown(e, editor) {
+function handleKeydown(e, editor, [autoBracket, setAutoBracket]) {
   const { value, selectionStart, selectionEnd } = e.target;
   if (selectionStart !== selectionEnd) {
     return;
   }
 
+  // If the user types a closing bracket explictly, just jump to after the automatically added one
+  if (
+    selectionStart !== 0 &&
+    autoBracket === e.key &&
+    (e.keyCode === KEYCODE_BRACKETS_CLOSE || e.keyCode === KEYCODE_PARENS_CLOSE)
+  ) {
+    e.preventDefault();
+    editor._applyEdits({
+      value: value,
+      selectionStart: selectionStart + 1,
+      selectionEnd: selectionStart + 1,
+    });
+    setAutoBracket(null);
+    return;
+  }
+
+  // reset auto brackets
+  setAutoBracket(null);
+
   // When entering an open bracket/quote, add the closing one
   const pair = getPair(e);
   if (pair) {
+    // don't add double apostrophes if it looks like a sentence
+    if (
+      e.keyCode === KEYCODE_QUOTE &&
+      !e.shiftKey &&
+      selectionStart !== 0 &&
+      /[a-zA-Z]/.test(value.charAt(selectionStart - 1))
+    ) {
+      return;
+    }
+
     e.preventDefault();
     editor._applyEdits({
       value:
@@ -109,6 +141,7 @@ function handleKeydown(e, editor) {
       selectionStart: selectionStart + 1,
       selectionEnd: selectionStart + 1,
     });
+    setAutoBracket(pair[1]);
   }
 
   // When pressing enter immediately after an open bracket, automatically add a newline plus extra indent
