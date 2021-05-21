@@ -112,8 +112,9 @@ function useSelectedLine() {
   useEffect(() => {
     if (selected[0] !== -1) {
       if (selected[1] !== -1) {
-        const [s, e] = selected.sort();
-        window.location.hash = `#L${s}-${e}`;
+        const start = Math.min(...selected);
+        const end = Math.max(...selected);
+        window.location.hash = `#L${start}-${end}`;
       } else {
         window.location.hash = `#L${selected[0]}`;
       }
