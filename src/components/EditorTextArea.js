@@ -1,17 +1,27 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import ReactEditor from 'react-simple-code-editor';
 import EditorPrismStyle from './EditorPrismStyle';
 import { getHighlighter } from '../util/highlighting';
 
 export default function EditorTextArea({ code, setCode, language, fontSize }) {
+  const [isSelected, toggleSelected] = useSelectedLine();
   const highlight = getHighlighter(language);
 
   function highlightWithLineNumbers(input, grammar) {
     return highlight(input, grammar)
       .split('\n')
-      .map((line, i) => `<span class='editorLineNumber'>${i + 1}</span>${line}`)
-      .join('\n');
+      .map((line, i) => (
+        <span key={i}>
+          <LineNumber
+            lineNo={i + 1}
+            selected={isSelected(i + 1)}
+            toggleSelected={toggleSelected}
+          />
+          <span dangerouslySetInnerHTML={{ __html: line }} />
+        </span>
+      ))
+      .reduce((prev, curr) => [prev, '\n', curr]);
   }
 
   const autoBracketState = useState(null);
@@ -38,6 +48,18 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
   );
 }
 
+const LineNumber = ({ lineNo, selected, toggleSelected }) => {
+  function click(e) {
+    toggleSelected(lineNo, e.shiftKey);
+  }
+
+  return selected ? (
+    <HighlightedLineNumber onClick={click}>{lineNo}</HighlightedLineNumber>
+  ) : (
+    <PlainLineNumber onClick={click}>{lineNo}</PlainLineNumber>
+  );
+};
+
 const StyledReactEditor = styled(ReactEditor)`
   counter-reset: line;
   font-size: ${props => props.size}px;
@@ -52,17 +74,77 @@ const StyledReactEditor = styled(ReactEditor)`
   pre {
     padding-left: 60px !important;
   }
-
-  .editorLineNumber {
-    position: absolute;
-    left: 0px;
-    color: ${props => props.theme.editor.lineNumber};
-    text-align: right;
-    width: 40px;
-    font-weight: 100;
-    user-select: none;
-  }
 `;
+
+const PlainLineNumber = styled.span`
+  position: absolute;
+  left: 0px;
+  color: ${props => props.theme.editor.lineNumber};
+  text-align: right;
+  width: 40px;
+  font-weight: 100;
+  user-select: none;
+
+  // override parent <pre>
+  pointer-events: auto;
+  cursor: pointer;
+`;
+
+const HighlightedLineNumber = styled(PlainLineNumber)`
+  color: ${props => props.theme.editor.lineNumberHl};
+  background-color: ${props => props.theme.editor.lineNumberHlBackground};
+  font-weight: bold;
+`;
+
+function useSelectedLine() {
+  // extract highlighted lines from window hash
+  const [selected, setSelected] = useState(() => {
+    const hash = window.location.hash;
+    if (/^#L\d+(-\d+)?$/.test(hash)) {
+      const [start, end] = hash.substring(2).split('-').map(Number);
+      return [start, isNaN(end) ? -1 : end];
+    } else {
+      return [-1, -1];
+    }
+  });
+
+  // update window hash when a new line is highlighted
+  useEffect(() => {
+    if (selected[0] !== -1) {
+      if (selected[1] !== -1) {
+        const [s, e] = selected.sort();
+        window.location.hash = `#L${s}-${e}`;
+      } else {
+        window.location.hash = `#L${selected[0]}`;
+      }
+    }
+  }, [selected]);
+
+  // toggle the highlighting for a given line
+  function toggleSelected(lineNo, shift) {
+    if (selected[0] === lineNo && selected[1] === -1) {
+      setSelected([-1, -1]);
+    } else if (selected[0] === -1 || !shift) {
+      setSelected([lineNo, -1]);
+    } else {
+      setSelected([selected[0], lineNo]);
+    }
+  }
+
+  // should a line be highlighted in the viewer?
+  function isSelected(lineNo) {
+    if (selected[0] === -1) {
+      return false;
+    }
+    if (selected[1] === -1) {
+      return selected[0] === lineNo;
+    }
+
+    return lineNo >= Math.min(...selected) && lineNo <= Math.max(...selected);
+  }
+
+  return [isSelected, toggleSelected];
+}
 
 const KEYCODE_ENTER = 13;
 const KEYCODE_PARENS = 57;

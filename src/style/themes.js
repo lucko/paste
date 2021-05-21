@@ -7,6 +7,8 @@ const themes = {
     editor: {
       background: 'none',
       lineNumber: '#cccccc',
+      lineNumberHl: 'black',
+      lineNumberHlBackground: '#e0f6ff',
       primary: 'black',
       selection: '#b3d4fc',
       comment: 'slategray',
@@ -33,6 +35,8 @@ const themes = {
     editor: {
       background: '#041f29',
       lineNumber: '#81969A',
+      lineNumberHl: '#fff',
+      lineNumberHlBackground: '#0e303e',
       primary: '#E0E2E4',
       selection: '#E0E2E4',
       comment: '#7D8C93',
