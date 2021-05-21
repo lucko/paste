@@ -10,7 +10,7 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
 
   function highlightWithLineNumbers(input, grammar) {
     return highlight(input, grammar)
-      .split('\n')
+      .split(/\r?\n/)
       .map((line, i) => (
         <span key={i}>
           <LineNumber
