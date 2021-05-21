@@ -21,7 +21,13 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
           <span dangerouslySetInnerHTML={{ __html: line }} />
         </span>
       ))
-      .reduce((prev, curr) => [prev, '\n', curr]);
+      .reduce((acc, curr, idx) => {
+        if (idx !== 0) {
+          acc.push('\n');
+        }
+        acc.push(curr);
+        return acc;
+      }, []);
   }
 
   const autoBracketState = useState(null);
