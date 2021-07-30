@@ -17,10 +17,10 @@ import 'prismjs/components/prism-javastacktrace';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-kotlin';
-//import 'prismjs/components/prism-log';
-import '../prism/prism-log'; // TODO replace with above once released
+import 'prismjs/components/prism-log';
 import 'prismjs/components/prism-markdown';
-//import 'prismjs/components/prism-php';
+import 'prismjs/components/prism-php';
+import 'prismjs/components/prism-markup-templating';
 import 'prismjs/components/prism-protobuf';
 import 'prismjs/components/prism-python';
 import 'prismjs/components/prism-jsx';
@@ -49,7 +49,7 @@ export const languageIds = [
   'kotlin',
   'log',
   'markdown',
-  //'php',
+  'php',
   'protobuf',
   'python',
   'jsx',
