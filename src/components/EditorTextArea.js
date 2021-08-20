@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import ReactEditor from 'react-simple-code-editor';
+import history from 'history/browser';
 import EditorPrismStyle from './EditorPrismStyle';
 import { getHighlighter } from '../util/highlighting';
 
@@ -123,15 +124,19 @@ function useSelectedLine() {
 
   // update window hash when a new line is highlighted
   useEffect(() => {
+    let hash = '';
+
     if (selected[0] !== -1) {
       if (selected[1] !== -1) {
         const start = Math.min(...selected);
         const end = Math.max(...selected);
-        window.location.hash = `#L${start}-${end}`;
+        hash = `#L${start}-${end}`;
       } else {
-        window.location.hash = `#L${selected[0]}`;
+        hash = `#L${selected[0]}`;
       }
     }
+
+    history.replace({ hash });
   }, [selected]);
 
   // toggle the highlighting for a given line

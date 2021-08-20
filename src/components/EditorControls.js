@@ -64,6 +64,7 @@ export default function EditorControls({
     setLanguage('plain');
     history.replace({
       pathname: '/',
+      hash: '',
     });
     document.title = 'paste';
   }
