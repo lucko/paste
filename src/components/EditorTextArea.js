@@ -5,7 +5,7 @@ import EditorPrismStyle from './EditorPrismStyle';
 import { getHighlighter } from '../util/highlighting';
 
 export default function EditorTextArea({ code, setCode, language, fontSize }) {
-  const [isSelected, toggleSelected] = useSelectedLine();
+  const [isSelected, isSelectionMiddle, toggleSelected] = useSelectedLine();
   const highlight = getHighlighter(language);
 
   function highlightWithLineNumbers(input, grammar) {
@@ -16,6 +16,7 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
           <LineNumber
             lineNo={i + 1}
             selected={isSelected(i + 1)}
+            shouldScroll={isSelectionMiddle(i + 1)}
             toggleSelected={toggleSelected}
           />
           <span dangerouslySetInnerHTML={{ __html: line }} />
@@ -54,15 +55,21 @@ export default function EditorTextArea({ code, setCode, language, fontSize }) {
   );
 }
 
-const LineNumber = ({ lineNo, selected, toggleSelected }) => {
+const LineNumber = ({ lineNo, selected, shouldScroll, toggleSelected }) => {
+  const autoScroll = useAutoScroll(shouldScroll);
+
   function click(e) {
     toggleSelected(lineNo, e.shiftKey);
   }
 
   return selected ? (
-    <HighlightedLineNumber onClick={click}>{lineNo}</HighlightedLineNumber>
+    <HighlightedLineNumber ref={autoScroll} onClick={click}>
+      {lineNo}
+    </HighlightedLineNumber>
   ) : (
-    <PlainLineNumber onClick={click}>{lineNo}</PlainLineNumber>
+    <PlainLineNumber ref={autoScroll} onClick={click}>
+      {lineNo}
+    </PlainLineNumber>
   );
 };
 
@@ -150,7 +157,40 @@ function useSelectedLine() {
     return lineNo >= Math.min(...selected) && lineNo <= Math.max(...selected);
   }
 
-  return [isSelected, toggleSelected];
+  // is a line in the middle of the selection
+  function isSelectionMiddle(lineNo) {
+    if (selected[0] === -1) {
+      return false;
+    }
+    if (selected[1] === -1) {
+      return selected[0] === lineNo;
+    }
+
+    return (
+      lineNo === Math.floor((Math.min(...selected) + Math.max(...selected)) / 2)
+    );
+  }
+
+  return [isSelected, isSelectionMiddle, toggleSelected];
+}
+
+function useAutoScroll(shouldScroll) {
+  const [firstRender, setFirstRender] = useState(true);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    // only attempt to autoscroll if this is the first render.
+    if (!firstRender) {
+      return;
+    }
+    setFirstRender(false);
+
+    if (shouldScroll) {
+      ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [shouldScroll, firstRender]);
+
+  return ref;
 }
 
 const KEYCODE_ENTER = 13;
