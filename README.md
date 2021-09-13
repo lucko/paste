@@ -1,33 +1,40 @@
-<h3 align="center"><img src="https://i.imgur.com/Aifb3lU.png"></h3>
-<h1 align="center">paste</h1>
+<h1 align="center">📋 paste</h1>
 
-paste is a simple, "code friendly" web frontend for [bytebin](https://github.com/lucko/bytebin).
+**paste is a simple web app for writing & sharing code.** It's my own take on conventional pastebin sites like *pastebin.com* or *hastebin*. 
 
-It is written in React using [react-simple-code-editor](https://github.com/satya164/react-simple-code-editor) and [Prism](https://github.com/PrismJS/prism).
+The frontend *(this repository)* is written using the React framework. The backend data storage is handled by a separate web service called [bytebin](https://github.com/lucko/bytebin).
 
-### Usage
-I host a public instance of paste at [paste.lucko.me](https://paste.lucko.me).
+The user-interface is quite simple; it supports syntax highlighting, automatic indentation, many supported languages, themes, zooming in/out, linking to specific lines or sections, and more!
 
-Please feel free to use it to share code/configs/whatever! However note the (very-non-legally worded) [terms of service](https://github.com/lucko/bytebin#public-instances) for bytebin apply.
+<p align="center">
+  <img src="https://i.imgur.com/03rBijj.gif">
+</p>
 
-If you come across any content which is illegal or infringes on copyright, please [get in touch](https://lucko.me/contact) and let me know so I can remove it.
+
+## Usage
+I host a public instance of paste at [paste.lucko.me](https://paste.lucko.me). Please feel free to use it to share code/configs/whatever!
+
+However please note that the (very-non-legally worded) [terms of service](https://github.com/lucko/bytebin#public-instances) for my public bytebin instance apply here too. If you come across any content which is illegal or infringes on copyright, please [get in touch](https://lucko.me/contact) and let me know so I can remove it.
 
 Uploaded content is retained for 30 days then deleted.
 
 ### Host your own
-If you want to host your own paste:
+If you want to host your own paste, first you need to compile it:
 
 ```bash
 git clone https://github.com/lucko/paste
 yarn install
+yarn build
 
-yarn start # to start a dev instance locally
-yarn build # to build for production
+# or run the following instead of 'yarn build' to start a webserver for testing/development
+yarn start
 ```
 
-### API
+You can then follow the [create-react-app deployment documentation](https://create-react-app.dev/docs/deployment/) for how to host the build output. I personally recommend deploying to the cloud using a service like Netlify instead of hosting on your own webserver.
+
+## API
 paste uses [bytebin](https://github.com/lucko/bytebin) for data storage.
 
 As a result, you can use the [bytebin API](https://github.com/lucko/bytebin#api-usage) to submit/read content programatically.
 
-To set the language of a paste, use the `Content-Type` header with value `text/<language>` (e.g. `Content-Type: text/yaml` for a .yml file).
+To set the language of a paste, use the `Content-Type` header with value `text/<language>` (e.g. `Content-Type: text/yaml` for a *.yml* file).
