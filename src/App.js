@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Editor from './components/Editor';
 import parseContentType from 'content-type-parser';
 import { languageIds } from './util/highlighting';
+import { bytebinUrl } from './util/constants';
 
 function getPasteIdFromUrl() {
   const path = window.location.pathname;
@@ -14,7 +15,7 @@ function getPasteIdFromUrl() {
 
 async function loadFromBytebin(id) {
   try {
-    const resp = await fetch('https://bytebin.lucko.me/' + id);
+    const resp = await fetch(bytebinUrl + id);
     if (resp.ok) {
       const content = await resp.text();
       const type = parseLanguageFromContentType(

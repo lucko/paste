@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  paste:
+    image: paste
+
+  bytebin:
+    image: ghcr.io/lucko/bytebin
+    volumes:
+      - data:/opt/bytebin/content
+    environment:
+      BYTEBIN_MISC_KEYLENGTH: 5
+
+  nginx:
+    image: nginx:alpine
+    command: ['nginx', '-g', 'daemon off;']
+    depends_on:
+      - paste
+      - bytebin
+    ports:
+      - 8080:80
+    volumes:
+      - ./docker/reverseproxy-nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+volumes:
+  data: {}

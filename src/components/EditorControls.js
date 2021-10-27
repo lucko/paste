@@ -7,6 +7,7 @@ import copy from 'copy-to-clipboard';
 import { MenuButton, Button } from './Menu';
 import { languageIds } from '../util/highlighting';
 import themes from '../style/themes';
+import { postUrl } from '../util/constants';
 
 export default function EditorControls({
   code,
@@ -142,7 +143,7 @@ async function saveToBytebin(code, language) {
     const compressed = gzip(code);
     const contentType = langaugeToContentType(language);
 
-    const resp = await fetch('https://bytebin.lucko.me/post', {
+    const resp = await fetch(postUrl, {
       method: 'POST',
       headers: {
         'Content-Type': contentType,
