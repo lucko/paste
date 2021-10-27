@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   paste:
-    image: paste
+    image: ghcr.io/lucko/paste
 
   bytebin:
     image: ghcr.io/lucko/bytebin
