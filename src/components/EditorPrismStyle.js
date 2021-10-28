@@ -85,6 +85,22 @@ const Main = styled.main`
     color: ${props => props.theme.editor.property};
   }
 
+  .token.tag .punctuation {
+    color: ${props => props.theme.editor.primary};
+  }
+
+  .token.script > .token.punctuation {
+    color: ${props => props.theme.editor.punctuation};
+  }
+
+  .token.tag .attr-value {
+    color: ${props => props.theme.editor.selector};
+  }
+
+  .token.tag .script {
+    color: ${props => props.theme.editor.primary};
+  }
+
   .token.boolean {
     color: ${props => props.theme.editor.keyword};
   }
@@ -99,8 +115,11 @@ const Main = styled.main`
     color: ${props => props.theme.editor.number};
   }
 
+  .token.attr-name {
+    color: ${props => props.theme.editor.function};
+  }
+
   .token.selector,
-  .token.attr-name,
   .token.string,
   .token.char,
   .token.builtin,

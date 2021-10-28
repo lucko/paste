@@ -55,6 +55,36 @@ const themes = {
       variable: '#ee9900',
     },
   },
+
+  darker: {
+    primary: '#c9d1d9', // fg.default
+    secondary: '#010409', // canvas.inset
+    highlight: '#161b22', // canvas.overlay
+
+    editor: {
+      background: '#0d1117', // canvas.default
+      lineNumber: '#484f58', // fg.subtle
+      lineNumberHl: '#f0f6fc', // fg.onEmphasis
+      lineNumberHlBackground: '#161b22', // canvas.overlay
+      primary: '#c9d1d9', // fg.default
+      selection: '#c9d1d9', // fg.default
+
+      comment: '#8b949e',
+      commentTag: '#79c0ff',
+      punctuation: '#d2a8ff',
+      annotation: '#a5d6ff',
+      namespace: '#c9d1d9',
+      property: '#7ee787',
+      constant: '#ff7b72',
+      number: '#f2cc60',
+      selector: '#79c0ff',
+      operator: '#ff7b72',
+      keyword: '#ff7b72',
+      function: '#e2c5ff',
+      className: '#ffa657',
+      variable: '#ffa657',
+    },
+  },
 };
 
 export default themes;
