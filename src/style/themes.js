@@ -27,7 +27,7 @@ const themes = {
       variable: '#e90',
     },
   },
-  dark: {
+  blue: {
     primary: '#022550',
     secondary: '#aaddff',
     highlight: '#77c8f9',
@@ -55,8 +55,7 @@ const themes = {
       variable: '#ee9900',
     },
   },
-
-  darker: {
+  dark: {
     primary: '#c9d1d9', // fg.default
     secondary: '#010409', // canvas.inset
     highlight: '#161b22', // canvas.overlay
