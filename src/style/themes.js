@@ -3,6 +3,7 @@ const themes = {
     primary: '#aaddff',
     secondary: '#022550',
     highlight: '#36368c',
+    lightOrDark: 'light',
 
     editor: {
       background: 'none',
@@ -31,6 +32,7 @@ const themes = {
     primary: '#022550',
     secondary: '#aaddff',
     highlight: '#77c8f9',
+    lightOrDark: 'dark',
 
     editor: {
       background: '#041f29',
@@ -59,6 +61,7 @@ const themes = {
     primary: '#c9d1d9', // fg.default
     secondary: '#010409', // canvas.inset
     highlight: '#161b22', // canvas.overlay
+    lightOrDark: 'dark',
 
     editor: {
       background: '#0d1117', // canvas.default

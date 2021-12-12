@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ThemeProvider } from 'styled-components';
+import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import ls from 'local-storage';
 
 import EditorControls from './EditorControls';
@@ -35,6 +35,7 @@ export default function Editor({ content, setContent, contentType }) {
   return (
     <>
       <ThemeProvider theme={themes[theme]}>
+        <EditorGlobalStyle />
         <EditorControls
           code={content}
           setCode={setContent}
@@ -54,6 +55,14 @@ export default function Editor({ content, setContent, contentType }) {
     </>
   );
 }
+
+const EditorGlobalStyle = createGlobalStyle`
+  html, body {
+    color-scheme: ${props => props.theme.lightOrDark};
+    scrollbar-color: ${props => props.theme.lightOrDark};
+    background-color: ${props => props.theme.editor.background};
+  }
+`;
 
 // hook used to load "preference" settings from local storage, or fall back to a default value.
 function usePreference(id, defaultValue, valid) {
