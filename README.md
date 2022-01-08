@@ -1,33 +1,47 @@
-<h1 align="center">📋 paste</h1>
+<p align="center">
+  <img src=".github/banner.svg">
+</p>
 
 **paste is a simple web app for writing & sharing code.** It's my own take on conventional pastebin sites like _pastebin.com_ or _hastebin_.
 
 The frontend _(this repository)_ is written using the React framework. The backend data storage is handled by a separate web service called [bytebin](https://github.com/lucko/bytebin).
 
-The user-interface is quite simple; it supports syntax highlighting, automatic indentation, many supported languages, themes, zooming in/out, linking to specific lines or sections, and more!
+The user-interface is based on the [Monaco Editor](https://microsoft.github.io/monaco-editor/), the engine behind the popular Visual Studio Code text editor. It's quite simple; it supports syntax highlighting, automatic indentation, many supported languages, themes, zooming in/out, linking to specific lines or sections, and more!
 
-<p align="center">
-  <img src="https://i.imgur.com/03rBijj.gif">
-</p>
+## pastes.dev
 
-## Usage
+I host a public instance at [pastes.dev](https://pastes.dev). Please feel free to use it to share code/configs/whatever!
 
-I host a public instance of paste at [paste.lucko.me](https://paste.lucko.me). Please feel free to use it to share code/configs/whatever!
+Please note that the following (very-non-legally worded) [terms of service](https://github.com/lucko/bytebin#public-instances) apply.   
+If you come across any content which is illegal or infringes on copyright, please [get in touch](https://lucko.me/contact) and let me know so I can remove it.
 
-However please note that the (very-non-legally worded) [terms of service](https://github.com/lucko/bytebin#public-instances) for my public bytebin instance apply here too. If you come across any content which is illegal or infringes on copyright, please [get in touch](https://lucko.me/contact) and let me know so I can remove it.
+Uploaded content is retained for 90 days then deleted.
 
-Uploaded content is retained for 30 days then deleted.
+### pastes.dev API
 
-### Host your own
+* To **read** content, send a HTTP `GET` request to `https://api.pastes.dev/<key>`.
+  * Replace `<key>` with the id of the paste.
+  * The content is returned in the response body.
+  * The `Content-Type` header is `text/<language>`, where language is the id of the language the paste was saved with.
+* To **upload** content, send a HTTP `POST` request to `https://api.pastes.dev/post`.
+  * Include the content in the request body.
+  * Specify the language with the `Content-Type: text/<language>` header, and please provide a `User-Agent` header too.
+  * The paste "key" is returned in the `Location` header, or in the response body as a JSON object in the format `{"key": "<key>"}`.
 
-If you want to host your own paste, first you need to compile it:
+The API is powered by the [bytebin](https://github.com/lucko/bytebin) service, so more information about how it works can be found there.
+## Host your own
+
+It's quite simple to host your own version.
 
 ```bash
 git clone https://github.com/lucko/paste
+cd paste
 yarn install
+
+# Outputs html/css/js files to /build
 yarn build
 
-# or run the following instead of 'yarn build' to start a webserver for testing/development
+# Start a webserver for testing/development
 yarn start
 ```
 
@@ -41,11 +55,3 @@ docker compose up -d
 ```
 
 You should then (hopefully!) be able to access the application at `http://localhost:8080/`.
-
-## API
-
-paste uses [bytebin](https://github.com/lucko/bytebin) for data storage.
-
-As a result, you can use the [bytebin API](https://github.com/lucko/bytebin#api-usage) to submit/read content programatically.
-
-To set the language of a paste, use the `Content-Type` header with value `text/<language>` (e.g. `Content-Type: text/yaml` for a _.yml_ file).

@@ -5,8 +5,20 @@ body {
   padding: 0;
   margin: 0;
   font-family: 'JetBrains Mono', monospace;
+
+  height: 100%;
+  width: 100%;
 }
 
 * {
   box-sizing: border-box;
+}
+
+#root {
+  width: 100vw;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }

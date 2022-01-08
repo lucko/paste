@@ -1,34 +1,36 @@
 const themes = {
   light: {
+    id: 'light',
     primary: '#aaddff',
     secondary: '#022550',
     highlight: '#36368c',
     lightOrDark: 'light',
 
     editor: {
-      background: 'none',
+      background: '#ffffff',
       lineNumber: '#cccccc',
-      lineNumberHl: 'black',
+      lineNumberHl: '#000000',
       lineNumberHlBackground: '#e0f6ff',
-      primary: 'black',
+      primary: '#000000',
       selection: '#b3d4fc',
-      comment: 'slategray',
+      comment: '#708090',
       commentTag: '#A082BD',
-      punctuation: '#999',
-      annotation: '#999',
-      namespace: 'slategray',
-      property: '#e90',
-      constant: '#905',
-      number: '#905',
-      selector: '#690',
+      punctuation: '#999999',
+      annotation: '#999999',
+      namespace: '#708090',
+      property: '#ee9900',
+      constant: '#990055',
+      number: '#990055',
+      selector: '#669900',
       operator: '#9a6e3a',
-      keyword: '#07a',
+      keyword: '#0077aa',
       function: '#DD4A68',
       className: '#DD4A68',
-      variable: '#e90',
+      variable: '#ee9900',
     },
   },
   blue: {
+    id: 'blue',
     primary: '#022550',
     secondary: '#aaddff',
     highlight: '#77c8f9',
@@ -37,7 +39,7 @@ const themes = {
     editor: {
       background: '#041f29',
       lineNumber: '#81969A',
-      lineNumberHl: '#fff',
+      lineNumberHl: '#ffffff',
       lineNumberHlBackground: '#0e303e',
       primary: '#E0E2E4',
       selection: '#E0E2E4',
@@ -58,6 +60,7 @@ const themes = {
     },
   },
   dark: {
+    id: 'dark',
     primary: '#c9d1d9', // fg.default
     secondary: '#010409', // canvas.inset
     highlight: '#161b22', // canvas.overlay
@@ -70,7 +73,6 @@ const themes = {
       lineNumberHlBackground: '#161b22', // canvas.overlay
       primary: '#c9d1d9', // fg.default
       selection: '#c9d1d9', // fg.default
-
       comment: '#8b949e',
       commentTag: '#79c0ff',
       punctuation: '#d2a8ff',
@@ -90,3 +92,89 @@ const themes = {
 };
 
 export default themes;
+
+export function makeMonacoTheme(theme) {
+  return {
+    base: theme.lightOrDark === 'light' ? 'vs' : 'vs-dark',
+    inherit: true,
+    rules: [
+      {
+        token: '', // minimap
+        foreground: theme.editor.primary.substring(1),
+        background: theme.editor.background.substring(1),
+      },
+      {
+        token: 'string',
+        foreground: theme.editor.selector.substring(1),
+      },
+      {
+        token: 'keyword',
+        foreground: theme.editor.keyword.substring(1),
+      },
+      {
+        token: 'constant',
+        foreground: theme.editor.constant.substring(1),
+      },
+      {
+        token: 'number',
+        foreground: theme.editor.number.substring(1),
+      },
+      {
+        token: 'annotation',
+        foreground: theme.editor.annotation.substring(1),
+      },
+      {
+        token: 'variable',
+        foreground: theme.editor.variable.substring(1),
+      },
+      {
+        token: 'operator',
+        foreground: theme.editor.operator.substring(1),
+      },
+      {
+        token: 'operators',
+        foreground: theme.editor.operator.substring(1),
+      },
+      {
+        token: 'punctuation',
+        foreground: theme.editor.operator.substring(1),
+      },
+      {
+        token: 'delimiter',
+        foreground: theme.editor.punctuation.substring(1),
+      },
+      {
+        token: 'delimiter.square',
+        foreground: theme.editor.punctuation.substring(1),
+      },
+      {
+        token: 'delimiter.bracket',
+        foreground: theme.editor.punctuation.substring(1),
+      },
+      {
+        token: 'delimiter.parenthesis',
+        foreground: theme.editor.punctuation.substring(1),
+      },
+      {
+        token: 'identifier',
+        foreground: theme.editor.function.substring(1),
+      },
+      {
+        token: 'type',
+        foreground: theme.editor.className.substring(1),
+      },
+      {
+        token: 'comment',
+        foreground: theme.editor.comment.substring(1),
+      },
+      {
+        token: 'identifier.java',
+        foreground: theme.editor.primary.substring(1),
+      },
+    ],
+    colors: {
+      'editor.background': theme.editor.background,
+      'editor.foreground': theme.editor.primary,
+    },
+  };
+}
