@@ -16,12 +16,23 @@ export default function EditorTextArea({
   const [monaco, setMonaco] = useState();
   const [selected, toggleSelected] = useSelectedLine();
   const editorAreaRef = useRef();
-  useLineNumberMagic(editorAreaRef, selected, toggleSelected, forcedContent, editor, monaco);
+  useLineNumberMagic(
+    editorAreaRef,
+    selected,
+    toggleSelected,
+    forcedContent,
+    editor,
+    monaco
+  );
   usePlaceholderText(actualContent, editor, monaco);
 
   function beforeMount(monaco) {
     for (const [id, theme] of Object.entries(themes)) {
       monaco.editor.defineTheme(id, makeMonacoTheme(theme));
+      monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: true,
+      });
     }
   }
 
@@ -51,6 +62,7 @@ export default function EditorTextArea({
           renderLineHighlight: 'none',
           detectIndentation: true,
           tabSize: 2,
+          renderValidationDecorations: false,
         }}
         beforeMount={beforeMount}
         onMount={onMount}
@@ -142,13 +154,15 @@ function useLineNumberMagic(
     }
 
     // apply a decoration
-    const newDecorations = [{
-      range: new monaco.Range(selected[0], 1, selected[1], 1),
-      options: {
-        isWholeLine: true,
-        linesDecorationsClassName: 'highlighted-line',
+    const newDecorations = [
+      {
+        range: new monaco.Range(selected[0], 1, selected[1], 1),
+        options: {
+          isWholeLine: true,
+          linesDecorationsClassName: 'highlighted-line',
+        },
       },
-    }];
+    ];
     const decorations = editor.deltaDecorations([], newDecorations);
 
     // scroll the selected line into view
