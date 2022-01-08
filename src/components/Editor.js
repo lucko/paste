@@ -6,8 +6,15 @@ import EditorControls from './EditorControls';
 import EditorTextArea from './EditorTextArea';
 import themes from '../style/themes';
 
-export default function Editor({ content, setContent, contentType }) {
+export default function Editor({
+  forcedContent,
+  setForcedContent,
+  actualContent,
+  setActualContent,
+  contentType,
+}) {
   const [language, setLanguage] = useState('plain');
+
   const [theme, setTheme] = usePreference(
     'theme',
     'dark',
@@ -37,8 +44,8 @@ export default function Editor({ content, setContent, contentType }) {
       <ThemeProvider theme={themes[theme]}>
         <EditorGlobalStyle />
         <EditorControls
-          code={content}
-          setCode={setContent}
+          actualContent={actualContent}
+          setForcedContent={setForcedContent}
           language={language}
           setLanguage={setLanguage}
           theme={theme}
@@ -46,8 +53,9 @@ export default function Editor({ content, setContent, contentType }) {
           zoom={zoom}
         />
         <EditorTextArea
-          code={content}
-          setCode={setContent}
+          forcedContent={forcedContent}
+          setActualContent={setActualContent}
+          theme={themes[theme]}
           language={language}
           fontSize={fontSize}
         />

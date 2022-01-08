@@ -10,8 +10,8 @@ import themes from '../style/themes';
 import { postUrl } from '../util/constants';
 
 export default function EditorControls({
-  code,
-  setCode,
+  actualContent,
+  setForcedContent,
   language,
   setLanguage,
   theme,
@@ -23,23 +23,25 @@ export default function EditorControls({
 
   useEffect(() => {
     setRecentlySaved(false);
-  }, [code, language]);
+  }, [actualContent, language]);
 
   const save = useCallback(() => {
-    if (!code || recentlySaved) {
+    if (!actualContent || recentlySaved) {
       return;
     }
     setSaving(true);
-    saveToBytebin(code, language).then(pasteId => {
+    saveToBytebin(actualContent, language).then(pasteId => {
       setSaving(false);
       setRecentlySaved(true);
-      history.replace({
-        pathname: pasteId,
-      });
-      copy(window.location.href);
-      document.title = 'paste | ' + pasteId;
+      if (pasteId) {
+        history.replace({
+          pathname: pasteId,
+        });
+        copy(window.location.href);
+        document.title = 'paste | ' + pasteId;
+      }
     });
-  }, [code, language, recentlySaved]);
+  }, [actualContent, language, recentlySaved]);
 
   useEffect(() => {
     const listener = e => {
@@ -61,7 +63,7 @@ export default function EditorControls({
   }, [save, zoom]);
 
   function reset() {
-    setCode('');
+    setForcedContent('');
     setLanguage('plain');
     history.replace({
       pathname: '/',
@@ -109,6 +111,7 @@ export default function EditorControls({
 
 const Header = styled.header`
   position: fixed;
+  top: 0;
   z-index: 2;
   width: 100%;
   height: 2em;
