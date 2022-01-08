@@ -169,7 +169,7 @@ export function makeMonacoTheme(theme) {
       },
       {
         token: 'identifier.java',
-        foreground: theme.primary.substring(1),
+        foreground: theme.editor.primary.substring(1),
       },
     ],
     colors: {
