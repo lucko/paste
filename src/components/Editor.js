@@ -54,6 +54,7 @@ export default function Editor({
         />
         <EditorTextArea
           forcedContent={forcedContent}
+          actualContent={actualContent}
           setActualContent={setActualContent}
           theme={themes[theme]}
           language={language}

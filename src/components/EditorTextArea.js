@@ -6,6 +6,7 @@ import themes, { makeMonacoTheme } from '../style/themes';
 
 export default function EditorTextArea({
   forcedContent,
+  actualContent,
   setActualContent,
   theme,
   language,
@@ -16,6 +17,7 @@ export default function EditorTextArea({
   const [selected, toggleSelected] = useSelectedLine();
   const editorAreaRef = useRef();
   useLineNumberMagic(editorAreaRef, selected, toggleSelected, editor, monaco);
+  usePlaceholderText(actualContent, editor, monaco);
 
   function beforeMount(monaco) {
     for (const [id, theme] of Object.entries(themes)) {
@@ -72,7 +74,39 @@ const EditorArea = styled.main`
     background-color: ${props => props.theme.editor.lineNumberHlBackground};
     font-weight: bold;
   }
+
+  .placeholder-text {
+    position: absolute;
+    opacity: 0.5;
+    font-weight: lighter;
+
+    &::after {
+      content: 'Paste (or type) some code...';
+    }
+  }
 `;
+
+function usePlaceholderText(actualContent, editor, monaco) {
+  useEffect(() => {
+    if (!editor || !monaco || actualContent) {
+      return;
+    }
+    const decoration = {
+      range: new monaco.Range(1, 1, 1, 1),
+      options: {
+        after: {
+          content: '\u200B',
+          inlineClassName: 'placeholder-text',
+        },
+      },
+    };
+    const decorations = editor.deltaDecorations([], [decoration]);
+
+    return () => {
+      editor.deltaDecorations(decorations, []);
+    };
+  }, [editor, monaco, actualContent]);
+}
 
 function useLineNumberMagic(
   editorAreaRef,
@@ -105,9 +139,9 @@ function useLineNumberMagic(
       return;
     }
 
-    const range = [];
+    const newDecorations = [];
     if (selected[0] !== -1) {
-      range.push({
+      newDecorations.push({
         range: new monaco.Range(selected[0], 1, selected[1], 1),
         options: {
           isWholeLine: true,
@@ -115,7 +149,7 @@ function useLineNumberMagic(
         },
       });
     }
-    const decorations = editor.deltaDecorations([], range);
+    const decorations = editor.deltaDecorations([], newDecorations);
 
     return () => {
       editor.deltaDecorations(decorations, []);
