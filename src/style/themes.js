@@ -157,7 +157,7 @@ export function makeMonacoTheme(theme) {
       },
       {
         token: 'identifier',
-        foreground: theme.editor.function.substring(1),
+        foreground: theme.editor.primary.substring(1),
       },
       {
         token: 'type',
@@ -166,10 +166,6 @@ export function makeMonacoTheme(theme) {
       {
         token: 'comment',
         foreground: theme.editor.comment.substring(1),
-      },
-      {
-        token: 'identifier.java',
-        foreground: theme.editor.primary.substring(1),
       },
     ],
     colors: {

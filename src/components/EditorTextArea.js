@@ -16,7 +16,7 @@ export default function EditorTextArea({
   const [monaco, setMonaco] = useState();
   const [selected, toggleSelected] = useSelectedLine();
   const editorAreaRef = useRef();
-  useLineNumberMagic(editorAreaRef, selected, toggleSelected, editor, monaco);
+  useLineNumberMagic(editorAreaRef, selected, toggleSelected, forcedContent, editor, monaco);
   usePlaceholderText(actualContent, editor, monaco);
 
   function beforeMount(monaco) {
@@ -112,6 +112,7 @@ function useLineNumberMagic(
   editorAreaRef,
   selected,
   toggleSelected,
+  forcedContent,
   editor,
   monaco
 ) {
@@ -134,27 +135,34 @@ function useLineNumberMagic(
   }, [editorAreaRef, toggleSelected]);
 
   // apply a 'highlighed' decoration to the selected lines
+  // and scroll them into view if not already
   useEffect(() => {
-    if (!editor || !monaco) {
+    if (!editor || !monaco || selected[0] === -1) {
       return;
     }
 
-    const newDecorations = [];
-    if (selected[0] !== -1) {
-      newDecorations.push({
-        range: new monaco.Range(selected[0], 1, selected[1], 1),
-        options: {
-          isWholeLine: true,
-          linesDecorationsClassName: 'highlighted-line',
-        },
-      });
-    }
+    // apply a decoration
+    const newDecorations = [{
+      range: new monaco.Range(selected[0], 1, selected[1], 1),
+      options: {
+        isWholeLine: true,
+        linesDecorationsClassName: 'highlighted-line',
+      },
+    }];
     const decorations = editor.deltaDecorations([], newDecorations);
 
+    // scroll the selected line into view
+    if (selected[0] === selected[1]) {
+      editor.revealLineInCenterIfOutsideViewport(selected[0]);
+    } else {
+      editor.revealLinesInCenterIfOutsideViewport(selected[0], selected[1]);
+    }
+
+    // cleanup by removing the decorations
     return () => {
       editor.deltaDecorations(decorations, []);
     };
-  }, [editor, monaco, selected]);
+  }, [editor, monaco, selected, forcedContent]);
 }
 
 function useSelectedLine() {
