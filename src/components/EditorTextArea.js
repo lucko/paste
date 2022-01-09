@@ -49,6 +49,15 @@ export default function EditorTextArea({
     [setActualContent]
   );
 
+  // detect indentation whenever new forced content is set
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+
+    editor.getModel().detectIndentation(true, 2);
+  }, [editor, forcedContent])
+
   return (
     <EditorArea ref={editorAreaRef}>
       <Editor
@@ -60,8 +69,6 @@ export default function EditorTextArea({
           fontLigatures: true,
           wordWrap: true,
           renderLineHighlight: 'none',
-          detectIndentation: true,
-          tabSize: 2,
           renderValidationDecorations: false,
         }}
         beforeMount={beforeMount}
