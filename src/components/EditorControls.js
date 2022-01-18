@@ -98,7 +98,7 @@ export default function EditorControls({
         <Button
           className="optional"
           as="a"
-          href="https://github.com/lucko/paste"
+          href="https://github.com/lucko/paste#readme"
           target="_blank"
           rel="noreferrer"
         >
