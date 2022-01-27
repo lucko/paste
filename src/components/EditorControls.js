@@ -14,6 +14,8 @@ export default function EditorControls({
   setForcedContent,
   language,
   setLanguage,
+  readOnly,
+  setReadOnly,
   theme,
   setTheme,
   zoom,
@@ -72,6 +74,10 @@ export default function EditorControls({
     document.title = 'paste';
   }
 
+  function unsetReadOnly() {
+    setReadOnly(false);
+  }
+
   return (
     <Header>
       <Section>
@@ -85,6 +91,7 @@ export default function EditorControls({
           setValue={setLanguage}
           ids={languages}
         />
+        {readOnly && <Button onClick={unsetReadOnly}>[edit]</Button>}
       </Section>
       <Section>
         <Button onClick={() => zoom(1)}>[+ </Button>

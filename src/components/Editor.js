@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
+import { isMobile } from 'react-device-detect';
 import ls from 'local-storage';
 
 import EditorControls from './EditorControls';
@@ -13,7 +14,8 @@ export default function Editor({
   setActualContent,
   contentType,
 }) {
-  const [language, setLanguage] = useState('plain');
+  const [language, setLanguage] = useState(isMobile);
+  const [readOnly, setReadOnly] = useState(true);
 
   const [theme, setTheme] = usePreference(
     'theme',
@@ -48,6 +50,8 @@ export default function Editor({
           setForcedContent={setForcedContent}
           language={language}
           setLanguage={setLanguage}
+          readOnly={readOnly}
+          setReadOnly={setReadOnly}
           theme={theme}
           setTheme={setTheme}
           zoom={zoom}
@@ -59,6 +63,7 @@ export default function Editor({
           theme={themes[theme]}
           language={language}
           fontSize={fontSize}
+          readOnly={readOnly}
         />
       </ThemeProvider>
     </>

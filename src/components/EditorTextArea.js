@@ -11,6 +11,7 @@ export default function EditorTextArea({
   theme,
   language,
   fontSize,
+  readOnly,
 }) {
   const [editor, setEditor] = useState();
   const [monaco, setMonaco] = useState();
@@ -70,6 +71,7 @@ export default function EditorTextArea({
           wordWrap: true,
           renderLineHighlight: 'none',
           renderValidationDecorations: false,
+          readOnly,
         }}
         beforeMount={beforeMount}
         onMount={onMount}
