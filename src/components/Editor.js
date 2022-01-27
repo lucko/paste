@@ -14,8 +14,8 @@ export default function Editor({
   setActualContent,
   contentType,
 }) {
-  const [language, setLanguage] = useState(isMobile);
-  const [readOnly, setReadOnly] = useState(true);
+  const [language, setLanguage] = useState('plain');
+  const [readOnly, setReadOnly] = useState(isMobile);
 
   const [theme, setTheme] = usePreference(
     'theme',
@@ -64,6 +64,7 @@ export default function Editor({
           language={language}
           fontSize={fontSize}
           readOnly={readOnly}
+          setReadOnly={setReadOnly}
         />
       </ThemeProvider>
     </>
