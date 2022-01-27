@@ -72,6 +72,7 @@ export default function EditorTextArea({
           renderLineHighlight: 'none',
           renderValidationDecorations: false,
           readOnly,
+          domReadOnly: readOnly,
         }}
         beforeMount={beforeMount}
         onMount={onMount}
