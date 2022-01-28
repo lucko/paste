@@ -30,16 +30,32 @@ export default function EditorTextArea({
   function beforeMount(monaco) {
     for (const [id, theme] of Object.entries(themes)) {
       monaco.editor.defineTheme(id, makeMonacoTheme(theme));
-      monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-        noSemanticValidation: true,
-        noSyntaxValidation: true,
-      });
     }
+
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+    });
   }
 
   function onMount(editor, monaco) {
+    editor.addAction({
+      id: 'search',
+      label: 'Search with Google',
+      contextMenuGroupId: '9_cutcopypaste',
+      contextMenuOrder: 5,
+      run: (editor) => {
+        const selection = editor.getSelection()
+        if (!selection.isEmpty()) {
+          const query = editor.getModel().getValueInRange(selection);
+          window.open('https://www.google.com/search?q=' + query, '_blank');
+        }
+      }
+    })
+
     setEditor(editor);
     setMonaco(monaco);
+
     editor.focus();
   }
 
@@ -73,7 +89,6 @@ export default function EditorTextArea({
           renderValidationDecorations: false,
           readOnly,
           domReadOnly: readOnly,
-          contextmenu: false,
         }}
         beforeMount={beforeMount}
         onMount={onMount}
