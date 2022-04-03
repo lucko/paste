@@ -13,9 +13,10 @@ export default function Editor({
   actualContent,
   setActualContent,
   contentType,
+  pasteId,
 }) {
   const [language, setLanguage] = useState('plain');
-  const [readOnly, setReadOnly] = useState(isMobile);
+  const [readOnly, setReadOnly] = useState(isMobile && pasteId);
 
   const [theme, setTheme] = usePreference(
     'theme',

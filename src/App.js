@@ -83,6 +83,7 @@ export default function App() {
       actualContent={actualContent}
       setActualContent={setActualContent}
       contentType={contentType}
+      pasteId={pasteId}
     />
   );
 }
