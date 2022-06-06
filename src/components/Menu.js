@@ -65,16 +65,13 @@ export const MenuButton = ({ label, ids, value, setValue }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    if (!open) {
-      return;
-    }
-
     const listener = e => setOpen(false);
     window.addEventListener('click', listener);
     return () => window.removeEventListener('click', listener);
-  }, [open, setOpen]);
+  }, [setOpen]);
 
-  function toggleOpen() {
+  function toggleOpen(e) {
+    e.stopPropagation();
     setOpen(!open);
   }
 
