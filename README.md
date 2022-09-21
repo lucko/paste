@@ -5,22 +5,59 @@
 **paste is a simple web app for writing & sharing code.** It's my own take on conventional pastebin sites like _pastebin.com_ or _hastebin_.
 
 Anyone can use paste! The official/public instance can be accessed using the endpoints listed below, but you can also [host your own](#host-your-own) if you like!
+
 ##### 1) In a Web Browser
 Just go to https://pastes.dev!
 
 ##### 2) From the Command Line
-You can submit content using netcat.
+You can submit content most easily using [curl](https://curl.se/docs/manpage.html).
 
 ```shell
-# Pipe in some output from any command
-> echo "Hello world" | nc nc.pastes.dev 1337
-
 # Upload the contents of a file
-> cat example123.txt | nc nc.pastes.dev 1337
+> curl -T example.txt https://api.pastes.dev/post
+
+# Upload the contents of a file and specify the language
+> curl -T example.yml -H "Content-Type: text/yaml" https://api.pastes.dev/post
+
+# Pipe in some output from any command
+> echo "Hello world" | curl -T - https://api.pastes.dev/post
 ```
 
-##### 3) With the API
-Send GET/POST requests to `https://api.pastes.dev/`. More info [below](#pastesdev-api).
+<details>
+  <summary>If curl isn't installed on your system, you can also post using <b>netcat</b>.</summary>
+  
+  ```shell
+  # Pipe in some output from any command
+  > echo "Hello world" | nc nc.pastes.dev 1337
+  
+  # Upload the contents of a file
+  > cat example.txt | nc nc.pastes.dev 1337
+  ```
+</details>
+
+<details>
+  <summary>If you don't want to do so much typing, you can create a shorter <b>alias</b>.</summary>
+  
+  ```bash
+  # Add this to the end of `~/.bashrc` and run 'source ~/.bashrc'
+  paste() {
+    curl -T $1 https://api.pastes.dev/post
+  }
+  ```
+
+  then...
+
+  ```shell
+  # Upload the contents of a file
+  > paste example.txt
+
+  # Pipe in some output from any command
+  > echo "Hello!" | paste -
+  ```
+</details>
+
+##### 3) From Code
+Send GET/POST/PUT requests to `https://api.pastes.dev/`. More info [below](#pastesdev-api).
 
 ___
 
