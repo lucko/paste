@@ -1,4 +1,43 @@
-const themes = {
+import type { editor } from 'monaco-editor';
+
+export interface Theme {
+  id: string;
+  primary: string;
+  secondary: string;
+  highlight: string;
+  lightOrDark: string;
+
+  editor: {
+    background: string;
+    lineNumber: string;
+    lineNumberHl: string;
+    lineNumberHlBackground: string;
+    primary: string;
+    selection: string;
+    comment: string;
+    commentTag: string;
+    punctuation: string;
+    annotation: string;
+    namespace: string;
+    property: string;
+    constant: string;
+    number: string;
+    selector: string;
+    operator: string;
+    keyword: string;
+    function: string;
+    className: string;
+    variable: string;
+  };
+}
+
+export interface Themes {
+  light: Theme;
+  blue: Theme;
+  dark: Theme;
+}
+
+const themes: Themes = {
   light: {
     id: 'light',
     primary: '#aaddff',
@@ -93,7 +132,7 @@ const themes = {
 
 export default themes;
 
-export function makeMonacoTheme(theme) {
+export function makeMonacoTheme(theme: Theme): editor.IStandaloneThemeData {
   return {
     base: theme.lightOrDark === 'light' ? 'vs' : 'vs-dark',
     inherit: true,

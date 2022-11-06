@@ -1,13 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
-import styled from 'styled-components';
-import { gzip } from 'pako';
-import history from 'history/browser';
 import copy from 'copy-to-clipboard';
+import history from 'history/browser';
+import { useCallback, useEffect, useState } from 'react';
+import styled from 'styled-components';
 
-import { MenuButton, Button } from './Menu';
+import themes, { Themes } from '../style/themes';
 import { languages } from '../util/highlighting';
-import themes from '../style/themes';
-import { postUrl } from '../util/constants';
+import { saveToBytebin } from '../util/storage';
+import Button from './Button';
+import MenuButton from './MenuButton';
+
+export interface EditorControlsProps {
+  actualContent: string;
+  setForcedContent: (value: string) => void;
+  language: string;
+  setLanguage: (value: string) => void;
+  readOnly: boolean;
+  setReadOnly: (value: boolean) => void;
+  theme: keyof Themes;
+  setTheme: (value: keyof Themes) => void;
+  zoom: (delta: number) => void;
+}
 
 export default function EditorControls({
   actualContent,
@@ -19,9 +31,9 @@ export default function EditorControls({
   theme,
   setTheme,
   zoom,
-}) {
-  const [saving, setSaving] = useState(false);
-  const [recentlySaved, setRecentlySaved] = useState(false);
+}: EditorControlsProps) {
+  const [saving, setSaving] = useState<boolean>(false);
+  const [recentlySaved, setRecentlySaved] = useState<boolean>(false);
 
   useEffect(() => {
     setRecentlySaved(false);
@@ -46,7 +58,7 @@ export default function EditorControls({
   }, [actualContent, language, recentlySaved]);
 
   useEffect(() => {
-    const listener = e => {
+    const listener = (e: KeyboardEvent) => {
       if (e.ctrlKey || e.metaKey) {
         if (e.key === 's' || e.key === 'S') {
           e.preventDefault();
@@ -100,7 +112,7 @@ export default function EditorControls({
           label="theme"
           value={theme}
           setValue={setTheme}
-          ids={Object.keys(themes)}
+          ids={Object.keys(themes) as (keyof Themes)[]}
         />
         <Button
           className="optional"
@@ -139,36 +151,3 @@ const Section = styled.div`
     }
   }
 `;
-
-function langaugeToContentType(language) {
-  if (language === 'json') {
-    return 'application/json';
-  } else {
-    return 'text/' + language;
-  }
-}
-
-async function saveToBytebin(code, language) {
-  try {
-    const compressed = gzip(code);
-    const contentType = langaugeToContentType(language);
-
-    const resp = await fetch(postUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': contentType,
-        'Content-Encoding': 'gzip',
-        'Accept': 'application/json',
-      },
-      body: compressed,
-    });
-
-    if (resp.ok) {
-      const json = await resp.json();
-      return json.key;
-    }
-  } catch (e) {
-    console.log(e);
-  }
-  return null;
-}

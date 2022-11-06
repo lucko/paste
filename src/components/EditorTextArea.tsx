@@ -1,8 +1,25 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Editor, {
+  BeforeMount,
+  Monaco,
+  OnChange,
+  OnMount,
+} from '@monaco-editor/react';
 import history from 'history/browser';
-import Editor from '@monaco-editor/react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import themes, { makeMonacoTheme } from '../style/themes';
+import themes, { makeMonacoTheme, Theme } from '../style/themes';
+
+import type { editor } from 'monaco-editor';
+
+export interface EditorTextAreaProps {
+  forcedContent: string;
+  actualContent: string;
+  setActualContent: (value: string) => void;
+  theme: Theme;
+  language: string;
+  fontSize: number;
+  readOnly: boolean;
+}
 
 export default function EditorTextArea({
   forcedContent,
@@ -12,11 +29,12 @@ export default function EditorTextArea({
   language,
   fontSize,
   readOnly,
-}) {
-  const [editor, setEditor] = useState();
-  const [monaco, setMonaco] = useState();
+}: EditorTextAreaProps) {
+  const [editor, setEditor] = useState<editor.IStandaloneCodeEditor>();
+  const [monaco, setMonaco] = useState<Monaco>();
   const [selected, toggleSelected] = useSelectedLine();
-  const editorAreaRef = useRef();
+  const editorAreaRef = useRef<HTMLDivElement>(null);
+
   useLineNumberMagic(
     editorAreaRef,
     selected,
@@ -25,9 +43,10 @@ export default function EditorTextArea({
     editor,
     monaco
   );
+
   usePlaceholderText(actualContent, editor, monaco);
 
-  function beforeMount(monaco) {
+  const beforeMount: BeforeMount = monaco => {
     for (const [id, theme] of Object.entries(themes)) {
       monaco.editor.defineTheme(id, makeMonacoTheme(theme));
     }
@@ -36,32 +55,35 @@ export default function EditorTextArea({
       noSemanticValidation: true,
       noSyntaxValidation: true,
     });
-  }
+  };
 
-  function onMount(editor, monaco) {
+  const onMount: OnMount = (editor, monaco) => {
     editor.addAction({
       id: 'search',
       label: 'Search with Google',
       contextMenuGroupId: '9_cutcopypaste',
       contextMenuOrder: 5,
-      run: (editor) => {
-        const selection = editor.getSelection()
-        if (!selection.isEmpty()) {
-          const query = editor.getModel().getValueInRange(selection);
-          window.open('https://www.google.com/search?q=' + query, '_blank');
+      run: editor => {
+        const selection = editor.getSelection();
+        if (selection && !selection.isEmpty()) {
+          const model = editor.getModel();
+          if (model) {
+            const query = model.getValueInRange(selection);
+            window.open('https://www.google.com/search?q=' + query, '_blank');
+          }
         }
-      }
-    })
+      },
+    });
 
     setEditor(editor);
     setMonaco(monaco);
 
     editor.focus();
-  }
+  };
 
-  const onChange = useCallback(
+  const onChange: OnChange = useCallback(
     value => {
-      setActualContent(value);
+      setActualContent(value as string);
     },
     [setActualContent]
   );
@@ -72,8 +94,13 @@ export default function EditorTextArea({
       return;
     }
 
-    editor.getModel().detectIndentation(true, 2);
-  }, [editor, forcedContent])
+    const model = editor.getModel();
+    if (!model) {
+      return;
+    }
+
+    model.detectIndentation(true, 2);
+  }, [editor, forcedContent]);
 
   return (
     <EditorArea ref={editorAreaRef}>
@@ -84,9 +111,9 @@ export default function EditorTextArea({
           fontFamily: 'JetBrains Mono',
           fontSize: fontSize,
           fontLigatures: true,
-          wordWrap: true,
+          wordWrap: 'on',
           renderLineHighlight: 'none',
-          renderValidationDecorations: false,
+          renderValidationDecorations: 'off',
           readOnly,
           domReadOnly: readOnly,
         }}
@@ -124,13 +151,17 @@ const EditorArea = styled.main`
   }
 `;
 
-function usePlaceholderText(actualContent, editor, monaco) {
+function usePlaceholderText(
+  actualContent: string,
+  editor: editor.IStandaloneCodeEditor | undefined,
+  monaco: Monaco | undefined
+) {
   useEffect(() => {
     if (!editor || !monaco || actualContent) {
       return;
     }
     const decoration = {
-      range: new monaco.Range(1, 1, 1, 1),
+      range: new monaco.Range(1, 0, 1, 1),
       options: {
         after: {
           content: '\u200B',
@@ -146,13 +177,63 @@ function usePlaceholderText(actualContent, editor, monaco) {
   }, [editor, monaco, actualContent]);
 }
 
+type SelectedLine = [number, number];
+type ToggleSelectedFunction = (lineNo: number, e: MouseEvent) => void;
+
+function useSelectedLine(): [SelectedLine, ToggleSelectedFunction] {
+  // extract highlighted lines from window hash
+  const [selected, setSelected] = useState<[number, number]>(() => {
+    const hash = window.location.hash;
+    if (/^#L\d+(-\d+)?$/.test(hash)) {
+      const [start, end] = hash.substring(2).split('-').map(Number);
+      return [start, isNaN(end) ? start : end];
+    } else {
+      return [-1, -1];
+    }
+  });
+
+  // update window hash when a new line is highlighted
+  useEffect(() => {
+    let hash = '';
+
+    if (selected[0] !== -1) {
+      if (selected[1] !== selected[0]) {
+        const start = Math.min(...selected);
+        const end = Math.max(...selected);
+        hash = `#L${start}-${end}`;
+      } else {
+        hash = `#L${selected[0]}`;
+      }
+    }
+
+    history.replace({ hash });
+  }, [selected]);
+
+  // toggle the highlighting for a given line
+  const toggleSelected = useCallback(
+    (lineNo: number, e: MouseEvent) => {
+      const shift = e.shiftKey;
+      if (selected[0] === lineNo && selected[1] === lineNo) {
+        setSelected([-1, -1]);
+      } else if (selected[0] === -1 || !shift) {
+        setSelected([lineNo, lineNo]);
+      } else {
+        setSelected([selected[0], lineNo]);
+      }
+    },
+    [selected, setSelected]
+  );
+
+  return [selected, toggleSelected];
+}
+
 function useLineNumberMagic(
-  editorAreaRef,
-  selected,
-  toggleSelected,
-  forcedContent,
-  editor,
-  monaco
+  editorAreaRef: React.RefObject<HTMLDivElement>,
+  selected: SelectedLine,
+  toggleSelected: ToggleSelectedFunction,
+  forcedContent: string,
+  editor: editor.IStandaloneCodeEditor | undefined,
+  monaco: Monaco | undefined
 ) {
   // add an event listener for clicking on line numbers
   useEffect(() => {
@@ -161,9 +242,13 @@ function useLineNumberMagic(
       return;
     }
 
-    const handler = click => {
-      const target = click?.target;
-      if (target && target.classList.contains('line-numbers')) {
+    const handler = (click: MouseEvent) => {
+      const target = click?.target as HTMLElement;
+      if (
+        target &&
+        target.classList.contains('line-numbers') &&
+        target.textContent
+      ) {
         toggleSelected(parseInt(target.textContent), click);
       }
     };
@@ -203,48 +288,4 @@ function useLineNumberMagic(
       editor.deltaDecorations(decorations, []);
     };
   }, [editor, monaco, selected, forcedContent]);
-}
-
-function useSelectedLine() {
-  // extract highlighted lines from window hash
-  const [selected, setSelected] = useState(() => {
-    const hash = window.location.hash;
-    if (/^#L\d+(-\d+)?$/.test(hash)) {
-      const [start, end] = hash.substring(2).split('-').map(Number);
-      return [start, isNaN(end) ? start : end];
-    } else {
-      return [-1, -1];
-    }
-  });
-
-  // update window hash when a new line is highlighted
-  useEffect(() => {
-    let hash = '';
-
-    if (selected[0] !== -1) {
-      if (selected[1] !== selected[0]) {
-        const start = Math.min(...selected);
-        const end = Math.max(...selected);
-        hash = `#L${start}-${end}`;
-      } else {
-        hash = `#L${selected[0]}`;
-      }
-    }
-
-    history.replace({ hash });
-  }, [selected]);
-
-  // toggle the highlighting for a given line
-  function toggleSelected(lineNo, e) {
-    const shift = e.shiftKey;
-    if (selected[0] === lineNo && selected[1] === lineNo) {
-      setSelected([-1, -1]);
-    } else if (selected[0] === -1 || !shift) {
-      setSelected([lineNo, lineNo]);
-    } else {
-      setSelected([selected[0], lineNo]);
-    }
-  }
-
-  return [selected, toggleSelected];
 }
