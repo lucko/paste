@@ -1,17 +1,18 @@
 import copy from 'copy-to-clipboard';
 import history from 'history/browser';
-import { useCallback, useEffect, useState } from 'react';
+import { MutableRefObject, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import themes, { Themes } from '../style/themes';
 import { languages } from '../util/highlighting';
 import { saveToBytebin } from '../util/storage';
 import Button from './Button';
+import { ResetFunction } from './Editor';
 import MenuButton from './MenuButton';
 
 export interface EditorControlsProps {
   actualContent: string;
-  setForcedContent: (value: string) => void;
+  resetFunction: MutableRefObject<ResetFunction | undefined>;
   language: string;
   setLanguage: (value: string) => void;
   readOnly: boolean;
@@ -23,7 +24,7 @@ export interface EditorControlsProps {
 
 export default function EditorControls({
   actualContent,
-  setForcedContent,
+  resetFunction,
   language,
   setLanguage,
   readOnly,
@@ -77,7 +78,11 @@ export default function EditorControls({
   }, [save, zoom]);
 
   function reset() {
-    setForcedContent('');
+    if (!resetFunction.current) {
+      throw new Error();
+    }
+
+    resetFunction.current();
     setLanguage('plain');
     history.replace({
       pathname: '/',

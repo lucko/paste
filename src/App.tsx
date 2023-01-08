@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Editor from './components/Editor';
 import { loadFromBytebin } from './util/storage';
 
@@ -15,18 +15,16 @@ export default function App() {
   const [actualContent, setActualContent] = useState<string>('');
   const [contentType, setContentType] = useState<string>();
 
-  const setContent = useCallback(
-    (content: string) => {
-      setActualContent(content);
-      setForcedContent(content);
-    },
-    [setActualContent, setForcedContent]
-  );
+  function setContent(content: string) {
+    setActualContent(content);
+    setForcedContent(content);
+  }
 
   useEffect(() => {
     if (pasteId && state === INITIAL) {
       setState(LOADING);
-      setForcedContent('Loading...');
+      setContent('Loading...');
+
       loadFromBytebin(pasteId).then(({ ok, content, type }) => {
         if (ok) {
           setContent(content);
@@ -39,12 +37,11 @@ export default function App() {
         setState(LOADED);
       });
     }
-  }, [pasteId, state, setContent]);
+  }, [pasteId, state]);
 
   return (
     <Editor
       forcedContent={forcedContent}
-      setForcedContent={setContent}
       actualContent={actualContent}
       setActualContent={setActualContent}
       contentType={contentType}

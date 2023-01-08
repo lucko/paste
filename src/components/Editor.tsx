@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { ThemeProvider } from 'styled-components';
 
@@ -10,16 +10,16 @@ import EditorTextArea from './EditorTextArea';
 
 export interface EditorProps {
   forcedContent: string;
-  setForcedContent: (value: string) => void;
   actualContent: string;
   setActualContent: (value: string) => void;
   contentType?: string;
   pasteId?: string;
 }
 
+export type ResetFunction = () => void;
+
 export default function Editor({
   forcedContent,
-  setForcedContent,
   actualContent,
   setActualContent,
   contentType,
@@ -27,6 +27,7 @@ export default function Editor({
 }: EditorProps) {
   const [language, setLanguage] = useState<string>('plain');
   const [readOnly, setReadOnly] = useState<boolean>(isMobile && !!pasteId);
+  const resetFunction = useRef<ResetFunction>();
 
   const [theme, setTheme] = usePreference<keyof Themes>(
     'theme',
@@ -58,7 +59,7 @@ export default function Editor({
         <EditorGlobalStyle />
         <EditorControls
           actualContent={actualContent}
-          setForcedContent={setForcedContent}
+          resetFunction={resetFunction}
           language={language}
           setLanguage={setLanguage}
           readOnly={readOnly}
@@ -75,6 +76,7 @@ export default function Editor({
           language={language}
           fontSize={fontSize}
           readOnly={readOnly}
+          resetFunction={resetFunction}
         />
       </ThemeProvider>
     </>
