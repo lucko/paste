@@ -13,7 +13,7 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components';
-import themes, { makeMonacoTheme, Theme } from '../style/themes';
+import themes, { Theme } from '../style/themes';
 
 import type { editor } from 'monaco-editor';
 import { ResetFunction } from './Editor';
@@ -56,8 +56,8 @@ export default function EditorTextArea({
   usePlaceholderText(actualContent, editor, monaco);
 
   const beforeMount: BeforeMount = monaco => {
-    for (const [id, theme] of Object.entries(themes)) {
-      monaco.editor.defineTheme(id, makeMonacoTheme(theme));
+    for (const theme of Object.values(themes) as Theme[]) {
+      monaco.editor.defineTheme(theme.id, theme.editor);
     }
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
@@ -149,8 +149,8 @@ const EditorArea = styled.main`
   }
 
   .highlighted-line + div {
-    color: ${props => props.theme.editor.lineNumberHl};
-    background-color: ${props => props.theme.editor.lineNumberHlBackground};
+    color: ${props => props.theme.highlightedLine.color};
+    background-color: ${props => props.theme.highlightedLine.backgroundColor};
     font-weight: bold;
   }
 

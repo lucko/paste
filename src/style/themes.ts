@@ -1,215 +1,211 @@
 import type { editor } from 'monaco-editor';
 
+import dracula from 'monaco-themes/themes/Dracula.json';
+import monokai from 'monaco-themes/themes/Monokai.json';
+import solarizedDark from 'monaco-themes/themes/Solarized-dark.json';
+import solarizedLight from 'monaco-themes/themes/Solarized-light.json';
+
+type Color = `#${string}`;
+
 export interface Theme {
   id: string;
-  primary: string;
-  secondary: string;
-  highlight: string;
-  lightOrDark: string;
-
-  editor: {
-    background: string;
-    lineNumber: string;
-    lineNumberHl: string;
-    lineNumberHlBackground: string;
-    primary: string;
-    selection: string;
-    comment: string;
-    commentTag: string;
-    punctuation: string;
-    annotation: string;
-    namespace: string;
-    property: string;
-    constant: string;
-    number: string;
-    selector: string;
-    operator: string;
-    keyword: string;
-    function: string;
-    className: string;
-    variable: string;
+  primary: Color;
+  secondary: Color;
+  highlight: Color;
+  background: Color;
+  lightOrDark: 'light' | 'dark';
+  highlightedLine: {
+    color: Color;
+    backgroundColor: Color;
   };
+  editor: editor.IStandaloneThemeData;
 }
 
 export interface Themes {
-  light: Theme;
-  blue: Theme;
-  dark: Theme;
+  'dark': Theme;
+  'light': Theme;
+  'dracula': Theme;
+  'monokai': Theme;
+  'solarized': Theme;
+  'solarized-light': Theme;
 }
 
 const themes: Themes = {
-  light: {
-    id: 'light',
-    primary: '#aaddff',
-    secondary: '#022550',
-    highlight: '#36368c',
-    lightOrDark: 'light',
-
-    editor: {
-      background: '#ffffff',
-      lineNumber: '#cccccc',
-      lineNumberHl: '#000000',
-      lineNumberHlBackground: '#e0f6ff',
-      primary: '#000000',
-      selection: '#b3d4fc',
-      comment: '#708090',
-      commentTag: '#A082BD',
-      punctuation: '#999999',
-      annotation: '#999999',
-      namespace: '#708090',
-      property: '#ee9900',
-      constant: '#990055',
-      number: '#990055',
-      selector: '#669900',
-      operator: '#9a6e3a',
-      keyword: '#0077aa',
-      function: '#DD4A68',
-      className: '#DD4A68',
-      variable: '#ee9900',
-    },
-  },
-  blue: {
-    id: 'blue',
-    primary: '#022550',
-    secondary: '#aaddff',
-    highlight: '#77c8f9',
-    lightOrDark: 'dark',
-
-    editor: {
-      background: '#041f29',
-      lineNumber: '#81969A',
-      lineNumberHl: '#ffffff',
-      lineNumberHlBackground: '#0e303e',
-      primary: '#E0E2E4',
-      selection: '#E0E2E4',
-      comment: '#7D8C93',
-      commentTag: '#A082BD',
-      punctuation: '#E8E2B7',
-      annotation: '#00FFF8',
-      namespace: '#7CA8CF',
-      property: '#ee9900',
-      constant: '#F77669',
-      number: '#FFCD22',
-      selector: '#E2B671',
-      operator: '#E8E2B7',
-      keyword: '#1CCBEF',
-      function: '#BCBCBC',
-      className: '#82CF75',
-      variable: '#ee9900',
-    },
-  },
-  dark: {
+  'dark': {
     id: 'dark',
     primary: '#c9d1d9', // fg.default
     secondary: '#010409', // canvas.inset
     highlight: '#161b22', // canvas.overlay
+    background: '#0d1117', // canvas.default
     lightOrDark: 'dark',
 
-    editor: {
-      background: '#0d1117', // canvas.default
-      lineNumber: '#484f58', // fg.subtle
-      lineNumberHl: '#f0f6fc', // fg.onEmphasis
-      lineNumberHlBackground: '#161b22', // canvas.overlay
-      primary: '#c9d1d9', // fg.default
-      selection: '#c9d1d9', // fg.default
-      comment: '#8b949e',
-      commentTag: '#79c0ff',
-      punctuation: '#d2a8ff',
-      annotation: '#a5d6ff',
-      namespace: '#c9d1d9',
-      property: '#7ee787',
-      constant: '#ff7b72',
-      number: '#f2cc60',
-      selector: '#79c0ff',
-      operator: '#ff7b72',
-      keyword: '#ff7b72',
-      function: '#e2c5ff',
-      className: '#ffa657',
-      variable: '#ffa657',
+    highlightedLine: {
+      color: '#f0f6fc', // fg.onEmphasis
+      backgroundColor: '#161b22', // canvas.overlay
     },
+
+    editor: makeMonacoTheme({
+      base: 'vs-dark',
+      colors: {
+        primary: '#c9d1d9', // fg.default
+        background: '#0d1117', // canvas.default
+        comment: '#8b949e',
+        delimiter: '#d2a8ff',
+        annotation: '#a5d6ff',
+        constant: '#ff7b72',
+        number: '#f2cc60',
+        string: '#79c0ff',
+        operator: '#ff7b72',
+        keyword: '#ff7b72',
+        type: '#ffa657',
+        variable: '#ffa657',
+      },
+    }),
+  },
+  'light': {
+    id: 'light',
+    primary: '#aaddff',
+    secondary: '#022550',
+    highlight: '#36368c',
+    background: '#ffffff',
+    lightOrDark: 'light',
+
+    highlightedLine: {
+      color: '#000000',
+      backgroundColor: '#e0f6ff',
+    },
+
+    editor: makeMonacoTheme({
+      base: 'vs',
+      colors: {
+        primary: '#000000',
+        background: '#ffffff',
+        comment: '#708090',
+        delimiter: '#999999',
+        annotation: '#999999',
+        constant: '#990055',
+        number: '#990055',
+        string: '#669900',
+        operator: '#9a6e3a',
+        keyword: '#0077aa',
+        type: '#DD4A68',
+        variable: '#ee9900',
+      },
+    }),
+  },
+  'dracula': {
+    id: 'dracula',
+    primary: '#f8f8f2',
+    secondary: '#383a59',
+    highlight: '#44475a',
+    background: '#282a36',
+    lightOrDark: 'dark',
+    highlightedLine: {
+      color: '#586e75',
+      backgroundColor: '#44475a',
+    },
+    editor: dracula as editor.IStandaloneThemeData,
+  },
+  'monokai': {
+    id: 'monokai',
+    primary: '#F8F8F2',
+    secondary: '#222218',
+    highlight: '#49483E',
+    background: '#272822',
+    lightOrDark: 'dark',
+    highlightedLine: {
+      color: '#49483E',
+      backgroundColor: '#3E3D32',
+    },
+    editor: monokai as editor.IStandaloneThemeData,
+  },
+  'solarized': {
+    id: 'solarized',
+    primary: '#839496', // base0
+    secondary: '#073642', // base02
+    highlight: '#002b36', // base03
+    background: '#002B36', // base03
+    lightOrDark: 'dark',
+    highlightedLine: {
+      color: '#93a1a1', // base1
+      backgroundColor: '#073642', // base02
+    },
+    editor: solarizedDark as editor.IStandaloneThemeData,
+  },
+  'solarized-light': {
+    id: 'solarized-light',
+    primary: '#586E75', // base01
+    secondary: '#eee8d5', // base2
+    highlight: '#FDF6E3', // base3
+    background: '#FDF6E3', // base3
+    lightOrDark: 'light',
+    highlightedLine: {
+      color: '#586e75', // base01
+      backgroundColor: '#eee8d5', // base2
+    },
+    editor: solarizedLight as editor.IStandaloneThemeData,
   },
 };
 
 export default themes;
 
-export function makeMonacoTheme(theme: Theme): editor.IStandaloneThemeData {
+interface MonacoThemeProps {
+  base: 'vs' | 'vs-dark';
+  colors: {
+    primary: Color;
+    background: Color;
+    string: Color;
+    comment: Color;
+    delimiter: Color;
+    annotation: Color;
+    constant: Color;
+    number: Color;
+    operator: Color;
+    keyword: Color;
+    type: Color;
+    variable: Color;
+  };
+}
+
+export function makeMonacoTheme(
+  props: MonacoThemeProps
+): editor.IStandaloneThemeData {
+  const colors = Object.fromEntries(
+    Object.entries(props.colors).map(([key, color]) => [
+      key,
+      color.substring(1),
+    ])
+  ) as Record<keyof MonacoThemeProps['colors'], string>;
+
   return {
-    base: theme.lightOrDark === 'light' ? 'vs' : 'vs-dark',
+    base: props.base,
     inherit: true,
     rules: [
       {
-        token: '', // minimap
-        foreground: theme.editor.primary.substring(1),
-        background: theme.editor.background.substring(1),
+        token: '' /* minimap */,
+        foreground: colors.primary,
+        background: colors.background,
       },
-      {
-        token: 'string',
-        foreground: theme.editor.selector.substring(1),
-      },
-      {
-        token: 'keyword',
-        foreground: theme.editor.keyword.substring(1),
-      },
-      {
-        token: 'constant',
-        foreground: theme.editor.constant.substring(1),
-      },
-      {
-        token: 'number',
-        foreground: theme.editor.number.substring(1),
-      },
-      {
-        token: 'annotation',
-        foreground: theme.editor.annotation.substring(1),
-      },
-      {
-        token: 'variable',
-        foreground: theme.editor.variable.substring(1),
-      },
-      {
-        token: 'operator',
-        foreground: theme.editor.operator.substring(1),
-      },
-      {
-        token: 'operators',
-        foreground: theme.editor.operator.substring(1),
-      },
-      {
-        token: 'punctuation',
-        foreground: theme.editor.operator.substring(1),
-      },
-      {
-        token: 'delimiter',
-        foreground: theme.editor.punctuation.substring(1),
-      },
-      {
-        token: 'delimiter.square',
-        foreground: theme.editor.punctuation.substring(1),
-      },
-      {
-        token: 'delimiter.bracket',
-        foreground: theme.editor.punctuation.substring(1),
-      },
-      {
-        token: 'delimiter.parenthesis',
-        foreground: theme.editor.punctuation.substring(1),
-      },
-      {
-        token: 'identifier',
-        foreground: theme.editor.primary.substring(1),
-      },
-      {
-        token: 'type',
-        foreground: theme.editor.className.substring(1),
-      },
-      {
-        token: 'comment',
-        foreground: theme.editor.comment.substring(1),
-      },
+      { token: 'string', foreground: colors.string },
+      { token: 'keyword', foreground: colors.keyword },
+      { token: 'constant', foreground: colors.constant },
+      { token: 'number', foreground: colors.number },
+      { token: 'annotation', foreground: colors.annotation },
+      { token: 'variable', foreground: colors.variable },
+      { token: 'operator', foreground: colors.operator },
+      { token: 'operators', foreground: colors.operator },
+      { token: 'punctuation', foreground: colors.operator },
+      { token: 'delimiter', foreground: colors.delimiter },
+      { token: 'delimiter.square', foreground: colors.delimiter },
+      { token: 'delimiter.bracket', foreground: colors.delimiter },
+      { token: 'delimiter.parenthesis', foreground: colors.delimiter },
+      { token: 'identifier', foreground: colors.primary },
+      { token: 'type', foreground: colors.type },
+      { token: 'comment', foreground: colors.comment },
     ],
     colors: {
-      'editor.background': theme.editor.background,
-      'editor.foreground': theme.editor.primary,
+      'editor.background': `#${colors.background}`,
+      'editor.foreground': `#${colors.primary}`,
     },
   };
 }
