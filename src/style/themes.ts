@@ -264,7 +264,7 @@ const themes: Themes = {
   'catppuccin-macchiato': {
     id: 'catppuccin-macchiato',
     primary: '#cad3f5', // text
-    secondary: '#5b6078', // base
+    secondary: '#24273a', // base
     highlight: '#5b6078', // selection background
     background: '#1e2030', // mantle
     lightOrDark: 'dark',
