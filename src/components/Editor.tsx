@@ -6,6 +6,7 @@ import usePreference from '../hooks/usePreference';
 import themes, { Themes } from '../style/themes';
 import EditorControls from './EditorControls';
 import EditorGlobalStyle from './EditorGlobalStyle';
+import EditorOverlay from './EditorOverlay';
 import EditorTextArea from './EditorTextArea';
 
 export interface EditorProps {
@@ -57,6 +58,7 @@ export default function Editor({
     <>
       <ThemeProvider theme={themes[theme]}>
         <EditorGlobalStyle />
+        <EditorOverlay />
         <EditorControls
           actualContent={actualContent}
           resetFunction={resetFunction}

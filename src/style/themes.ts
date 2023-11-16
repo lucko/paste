@@ -13,6 +13,7 @@ export interface Theme {
   secondary: Color;
   highlight: Color;
   background: Color;
+  comment: Color;
   lightOrDark: 'light' | 'dark';
   highlightedLine: {
     color: Color;
@@ -37,6 +38,7 @@ const themes: Themes = {
     secondary: '#010409', // canvas.inset
     highlight: '#161b22', // canvas.overlay
     background: '#0d1117', // canvas.default
+    comment: '#8b949e',
     lightOrDark: 'dark',
 
     highlightedLine: {
@@ -68,6 +70,7 @@ const themes: Themes = {
     secondary: '#022550',
     highlight: '#36368c',
     background: '#ffffff',
+    comment: '#708090',
     lightOrDark: 'light',
 
     highlightedLine: {
@@ -99,6 +102,7 @@ const themes: Themes = {
     secondary: '#383a59',
     highlight: '#44475a',
     background: '#282a36',
+    comment: '#6272a4',
     lightOrDark: 'dark',
     highlightedLine: {
       color: '#586e75',
@@ -112,6 +116,7 @@ const themes: Themes = {
     secondary: '#222218',
     highlight: '#49483E',
     background: '#272822',
+    comment: '#75715e',
     lightOrDark: 'dark',
     highlightedLine: {
       color: '#49483E',
@@ -125,6 +130,7 @@ const themes: Themes = {
     secondary: '#073642', // base02
     highlight: '#002b36', // base03
     background: '#002B36', // base03
+    comment: '#586e75', // base01
     lightOrDark: 'dark',
     highlightedLine: {
       color: '#93a1a1', // base1
@@ -138,6 +144,7 @@ const themes: Themes = {
     secondary: '#eee8d5', // base2
     highlight: '#FDF6E3', // base3
     background: '#FDF6E3', // base3
+    comment: '#93a1a1', // base1
     lightOrDark: 'light',
     highlightedLine: {
       color: '#586e75', // base01
