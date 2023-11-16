@@ -33,6 +33,7 @@ export interface Themes {
   'catppuccin-frappe': Theme;
   'catppuccin-macchiato': Theme;
   'catppuccin-mocha': Theme;
+  'catppuccin-oled': Theme;
 }
 
 const themes: Themes = {
@@ -263,7 +264,7 @@ const themes: Themes = {
   'catppuccin-macchiato': {
     id: 'catppuccin-macchiato',
     primary: '#cad3f5', // text
-    secondary: '#24273a', // base
+    secondary: '#5b6078', // base
     highlight: '#5b6078', // selection background
     background: '#1e2030', // mantle
     lightOrDark: 'dark',
@@ -305,6 +306,35 @@ const themes: Themes = {
       colors: {
         primary: '#cdd6f4', // text
         background: '#181825', // mantle
+        comment: '#6c7086', // comment
+        delimiter: '#9399b2', // brace, delimeter
+        annotation: '#f9e2af', // class, metadata
+        constant: '#fab387', // constant, number
+        number: '#fab387', // constant, number
+        string: '#a6e3a1', // string
+        operator: '#89dceb', // operator
+        keyword: '#cba6f7', // keyword
+        type: '#f9e2af', // class, metadata
+        variable: '#cdd6f4', // text
+      },
+    }),
+  },
+  'catppuccin-oled': {
+    id: 'catppuccin-oled',
+    primary: '#cdd6f4', // text
+    secondary: '#020202', // base
+    highlight: '#585b70', // selection background
+    background: '#010101', // mantle
+    lightOrDark: 'dark',
+    highlightedLine: {
+      color: '#f5e0dc', // cursor
+      backgroundColor: '#585b70', // selection background
+    },
+    editor: makeMonacoTheme({
+      base: 'vs-dark',
+      colors: {
+        primary: '#cdd6f4', // text
+        background: '#010101', // mantle
         comment: '#6c7086', // comment
         delimiter: '#9399b2', // brace, delimeter
         annotation: '#f9e2af', // class, metadata
