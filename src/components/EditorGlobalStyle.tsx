@@ -1,7 +1,6 @@
-import { createGlobalStyle, ThemeProps } from 'styled-components';
-import { Theme } from '../style/themes';
+import { createGlobalStyle } from 'styled-components';
 
-const EditorGlobalStyle = createGlobalStyle<ThemeProps<Theme>>`
+const EditorGlobalStyle = createGlobalStyle`
   html, body {
     color-scheme: ${props => props.theme.lightOrDark};
     scrollbar-color: ${props => props.theme.lightOrDark};
