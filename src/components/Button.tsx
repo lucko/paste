@@ -9,7 +9,7 @@ const Button = styled.div`
   color: inherit;
   text-decoration: none;
 
-  :hover {
+  &:hover {
     background: ${props => props.theme.highlight};
   }
 

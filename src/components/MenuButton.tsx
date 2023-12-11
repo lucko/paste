@@ -92,7 +92,7 @@ const Menu = styled.ul`
   }
 
   > li.selected {
-    ::before {
+    &::before {
       content: '*';
       font-weight: bold;
     }
