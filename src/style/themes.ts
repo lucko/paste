@@ -59,6 +59,11 @@ const themes: Themes = {
         keyword: '#ff7b72',
         type: '#ffa657',
         variable: '#ffa657',
+        logInfo: '#3fb950', // green.3
+        logError: '#f85149', // red.4
+        logWarning: '#d29922', // yellow.3
+        logDate: '#33B3AE', // teal.3
+        logException: '#f8e3a1', // yellow.0
       },
     }),
   },
@@ -90,6 +95,11 @@ const themes: Themes = {
         keyword: '#0077aa',
         type: '#DD4A68',
         variable: '#ee9900',
+        logInfo: '#2da44e', // green.4
+        logError: '#cf222e', // red.5
+        logWarning: '#d4a72c', // yellow.3
+        logDate: '#136061', // teal.6
+        logException: '#7d4e00', // yellow.6
       },
     }),
   },
@@ -104,7 +114,13 @@ const themes: Themes = {
       color: '#586e75',
       backgroundColor: '#44475a',
     },
-    editor: dracula as editor.IStandaloneThemeData,
+    editor: addLogColors(dracula as editor.IStandaloneThemeData, {
+      info: '#50FA7B', // green
+      error: '#FF5555', // red
+      warning: '#FFB86C', // orange
+      date: '#BD93F9', // purple
+      exception: '#F1FA8C', // yellow
+    }),
   },
   'monokai': {
     id: 'monokai',
@@ -117,7 +133,13 @@ const themes: Themes = {
       color: '#49483E',
       backgroundColor: '#3E3D32',
     },
-    editor: monokai as editor.IStandaloneThemeData,
+    editor: addLogColors(monokai as editor.IStandaloneThemeData, {
+      info: '#a6e22e', // green
+      error: '#f92672', // red
+      warning: '#fd971f', // orange
+      date: '#AB9DF2', // purple
+      exception: '#F1FA8C', // yellow
+    }),
   },
   'solarized': {
     id: 'solarized',
@@ -130,7 +152,13 @@ const themes: Themes = {
       color: '#93a1a1', // base1
       backgroundColor: '#073642', // base02
     },
-    editor: solarizedDark as editor.IStandaloneThemeData,
+    editor: addLogColors(solarizedDark as editor.IStandaloneThemeData, {
+      info: '#268bd2', // blue
+      error: '#dc322f', // red
+      warning: '#b58900', // yellow
+      date: '#2aa198', // cyan
+      exception: '#859900', // green
+    }),
   },
   'solarized-light': {
     id: 'solarized-light',
@@ -143,7 +171,13 @@ const themes: Themes = {
       color: '#586e75', // base01
       backgroundColor: '#eee8d5', // base2
     },
-    editor: solarizedLight as editor.IStandaloneThemeData,
+    editor: addLogColors(solarizedLight as editor.IStandaloneThemeData, {
+      info: '#268bd2', // blue
+      error: '#dc322f', // red
+      warning: '#b58900', // yellow
+      date: '#2aa198', // cyan
+      exception: '#859900', // green
+    }),
   },
 };
 
@@ -164,6 +198,11 @@ interface MonacoThemeProps {
     keyword: Color;
     type: Color;
     variable: Color;
+    logInfo: Color;
+    logError: Color;
+    logWarning: Color;
+    logDate: Color;
+    logException: Color;
   };
 }
 
@@ -202,10 +241,42 @@ export function makeMonacoTheme(
       { token: 'identifier', foreground: colors.primary },
       { token: 'type', foreground: colors.type },
       { token: 'comment', foreground: colors.comment },
+      { token: 'info.log', foreground: colors.logInfo },
+      { token: 'error.log', foreground: colors.logError, fontStyle: 'bold' },
+      { token: 'warning.log', foreground: colors.logWarning },
+      { token: 'date.log', foreground: colors.logDate },
+      { token: 'exception.log', foreground: colors.logException },
     ],
     colors: {
       'editor.background': `#${colors.background}`,
       'editor.foreground': `#${colors.primary}`,
     },
   };
+}
+
+interface LogColors {
+  info: Color;
+  error: Color;
+  warning: Color;
+  date: Color;
+  exception: Color;
+}
+
+export function addLogColors(
+  theme: editor.IStandaloneThemeData,
+  logColors: LogColors
+): editor.IStandaloneThemeData {
+  const colors = Object.fromEntries(
+    Object.entries(logColors).map(([key, color]) => [key, color.substring(1)])
+  ) as Record<keyof LogColors, string>;
+  theme.rules.push(
+    ...[
+      { token: 'info.log', foreground: colors.info },
+      { token: 'error.log', foreground: colors.error, fontStyle: 'bold' },
+      { token: 'warning.log', foreground: colors.warning },
+      { token: 'date.log', foreground: colors.date },
+      { token: 'exception.log', foreground: colors.exception },
+    ]
+  );
+  return theme;
 }

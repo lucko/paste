@@ -1,4 +1,5 @@
 export const languages = {
+  text: ['plain', 'log'],
   config: ['yaml', 'json', 'xml', 'ini'],
   code: [
     'java',
@@ -6,6 +7,7 @@ export const languages = {
     'typescript',
     'python',
     'kotlin',
+    'scala',
     'cpp',
     'csharp',
     'shell',
@@ -14,11 +16,8 @@ export const languages = {
     'sql',
     'go',
   ],
-  web: ['html', 'css', 'php'],
-  misc: ['plain', 'dockerfile', 'markdown'],
+  web: ['html', 'css', 'scss', 'php', 'graphql'],
+  misc: ['dockerfile', 'markdown', 'proto'],
 };
-
-// missing following the rewrite: toml, properties, log, javastacktrace, groovy, haskell, protobuf
-// would be good to add these back with custom language definitions
 
 export const languageIds = Object.values(languages).flat(1);

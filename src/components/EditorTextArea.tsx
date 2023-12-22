@@ -17,6 +17,7 @@ import themes, { Theme } from '../style/themes';
 
 import type { editor } from 'monaco-editor';
 import { ResetFunction } from './Editor';
+import { logLanguage } from '../util/log-language';
 
 export interface EditorTextAreaProps {
   forcedContent: string;
@@ -59,6 +60,9 @@ export default function EditorTextArea({
     for (const theme of Object.values(themes) as Theme[]) {
       monaco.editor.defineTheme(theme.id, theme.editor);
     }
+
+    monaco.languages.register({ id: 'log' });
+    monaco.languages.setMonarchTokensProvider('log', logLanguage);
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: true,
