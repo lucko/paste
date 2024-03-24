@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import Button from './Button';
 
@@ -16,6 +17,11 @@ export default function MenuButton<T extends string>({
   setValue,
 }: MenuButtonProps<T>) {
   const [open, setOpen] = useState<boolean>(false);
+  const [menuPosition, setMenuPosition] = useState<{
+    top: number;
+    left: number;
+  }>({ top: 0, left: 0 });
+  const buttonRef = useRef<HTMLDivElement | null>(null);
 
   // close the menu when a click is made elsewhere
   useEffect(() => {
@@ -26,6 +32,16 @@ export default function MenuButton<T extends string>({
 
   function toggleOpen(e: React.MouseEvent) {
     e.stopPropagation();
+    if (!buttonRef.current) {
+      return;
+    }
+    if (!open) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+      });
+    }
     setOpen(!open);
   }
 
@@ -63,22 +79,35 @@ export default function MenuButton<T extends string>({
   }
 
   return (
-    <Button onClick={toggleOpen}>
-      [<span>{label}: </span>
-      {value}]{open && <Menu>{items}</Menu>}
-    </Button>
+    <>
+      <Button onClick={toggleOpen} ref={buttonRef}>
+        [<span>{label}: </span>
+        {value}]
+      </Button>
+      {open &&
+        createPortal(
+          <Menu style={{ top: menuPosition.top, left: menuPosition.left }}>
+            {items}
+          </Menu>,
+          document.body
+        )}
+    </>
   );
 }
 
 const Menu = styled.ul`
   position: absolute;
-  top: 2em;
   margin: 0;
   padding: 0;
   list-style: none;
   background-color: ${props => props.theme.highlight};
   max-height: calc(100vh - 2em);
   overflow: auto;
+  z-index: 20;
+
+  > li {
+    cursor: pointer;
+  }
 
   > li.title {
     text-align: center;
