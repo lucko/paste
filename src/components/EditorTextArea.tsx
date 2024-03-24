@@ -27,6 +27,7 @@ export interface EditorTextAreaProps {
   language: string;
   fontSize: number;
   readOnly: boolean;
+  wordWrap: boolean
   resetFunction: MutableRefObject<ResetFunction | undefined>;
 }
 
@@ -38,6 +39,7 @@ export default function EditorTextArea({
   language,
   fontSize,
   readOnly,
+  wordWrap,
   resetFunction,
 }: EditorTextAreaProps) {
   const [editor, setEditor] = useState<editor.IStandaloneCodeEditor>();
@@ -129,7 +131,7 @@ export default function EditorTextArea({
           fontFamily: 'JetBrains Mono',
           fontSize: fontSize,
           fontLigatures: true,
-          wordWrap: 'on',
+          wordWrap: wordWrap ? "on" : "off",
           renderLineHighlight: 'none',
           renderValidationDecorations: 'off',
           readOnly,
