@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import Editor from './components/Editor';
 import { loadFromBytebin } from './util/storage';
+import { Language } from './util/language';
+import { detectLanguage } from './util/detect-language';
 
 const INITIAL = Symbol();
 const LOADING = Symbol();
@@ -13,7 +15,7 @@ export default function App() {
   const [state, setState] = useState<LoadingState>(INITIAL);
   const [forcedContent, setForcedContent] = useState<string>('');
   const [actualContent, setActualContent] = useState<string>('');
-  const [contentType, setContentType] = useState<string>();
+  const [contentType, setContentType] = useState<Language>();
 
   function setContent(content: string) {
     setActualContent(content);
@@ -28,8 +30,14 @@ export default function App() {
       loadFromBytebin(pasteId).then(({ ok, content, type }) => {
         if (ok) {
           setContent(content);
-          if (type) {
+          if (type !== 'plain') {
             setContentType(type);
+          } else {
+            detectLanguage(pasteId).then(detectedLanguage => {
+              if (detectedLanguage) {
+                setContentType(detectedLanguage);
+              }
+            });
           }
         } else {
           setContent(get404Message(pasteId));

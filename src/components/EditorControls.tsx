@@ -4,7 +4,7 @@ import { MutableRefObject, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import themes, { Themes } from '../style/themes';
-import { languages } from '../util/highlighting';
+import { languages, unknownLanguage } from '../util/language';
 import { saveToBytebin } from '../util/storage';
 import Button from './Button';
 import { ResetFunction } from './Editor';
@@ -104,9 +104,9 @@ export default function EditorControls({
         </Button>
         <MenuButton
           label="language"
-          value={language}
+          value={language === unknownLanguage ? '?' : language}
           setValue={setLanguage}
-          ids={languages}
+          ids={languages as unknown as Record<string, string[]>}
         />
         {readOnly && <Button onClick={unsetReadOnly}>[edit]</Button>}
       </Section>

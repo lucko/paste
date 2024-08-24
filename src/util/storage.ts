@@ -1,12 +1,12 @@
 import { gzip } from 'pako';
 import MIMEType from 'whatwg-mimetype';
 import { bytebinUrl, postUrl } from './constants';
-import { languageIds } from './highlighting';
+import { isLanguage, Language } from './language';
 
 interface LoadResultSuccess {
   ok: true;
   content: string;
-  type?: string;
+  type?: Language;
 }
 
 interface LoadResultFail {
@@ -64,13 +64,21 @@ export async function saveToBytebin(
   return null;
 }
 
-export function contentTypeToLanguage(contentType: string) {
+export function contentTypeToLanguage(
+  contentType: string
+): Language | undefined {
   const { type, subtype: subType } = new MIMEType(contentType);
   if (type === 'application' && subType === 'json') {
     return 'json';
   }
-  if (type === 'text' && languageIds.includes(subType.toLowerCase())) {
-    return subType.toLowerCase();
+
+  let subTypeLower = subType.toLowerCase();
+  if (subTypeLower.startsWith('x-')) {
+    subTypeLower = subTypeLower.substring(2);
+  }
+
+  if (type === 'text' && isLanguage(subTypeLower)) {
+    return subTypeLower;
   }
 }
 

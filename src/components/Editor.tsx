@@ -7,12 +7,13 @@ import themes, { Themes } from '../style/themes';
 import EditorControls from './EditorControls';
 import EditorGlobalStyle from './EditorGlobalStyle';
 import EditorTextArea from './EditorTextArea';
+import { Language } from '../util/language';
 
 export interface EditorProps {
   forcedContent: string;
   actualContent: string;
   setActualContent: (value: string) => void;
-  contentType?: string;
+  contentType?: Language;
   pasteId?: string;
 }
 
