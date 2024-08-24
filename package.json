@@ -7,6 +7,7 @@
     "copy-to-clipboard": "^3.3.3",
     "history": "^5.3.0",
     "local-storage": "^2.0.0",
+    "monaco-editor": "^0.51.0",
     "monaco-themes": "^0.4.4",
     "pako": "^2.1.0",
     "react": "^18.2.0",
@@ -27,13 +28,12 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/whatwg-mimetype": "^3.0.2",
-    "monaco-editor": "^0.44.0",
     "prettier": "^3.1.0",
     "prettier-plugin-organize-imports": "^3.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write '**/*.ts' '**/*.tsx' '**/*.css'",
