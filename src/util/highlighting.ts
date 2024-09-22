@@ -15,6 +15,7 @@ export const languages = {
     'rust',
     'sql',
     'go',
+    'lua',
     'swift',
     'c'
   ],
