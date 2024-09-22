@@ -15,6 +15,8 @@ export const languages = {
     'rust',
     'sql',
     'go',
+    'swift',
+    'c'
   ],
   web: ['html', 'css', 'scss', 'php', 'graphql'],
   misc: ['dockerfile', 'markdown', 'proto'],
