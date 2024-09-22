@@ -19,6 +19,11 @@ import type { editor } from 'monaco-editor';
 import { ResetFunction } from './Editor';
 import { logLanguage } from '../util/log-language';
 
+import * as monaco from 'monaco-editor';
+import { loader } from '@monaco-editor/react';
+
+loader.config({ monaco });
+
 export interface EditorTextAreaProps {
   forcedContent: string;
   actualContent: string;
@@ -261,13 +266,13 @@ function useLineNumberMagic(
     }
 
     const handler = (click: MouseEvent) => {
-      const target = click?.target as HTMLElement;
+      const element = document.elementFromPoint(click.x, click.y);
       if (
-        target &&
-        target.classList.contains('line-numbers') &&
-        target.textContent
+        element &&
+        element.classList.contains('line-numbers') &&
+        element.textContent
       ) {
-        toggleSelected(parseInt(target.textContent), click);
+        toggleSelected(parseInt(element.textContent), click);
       }
     };
 
