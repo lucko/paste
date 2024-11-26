@@ -17,7 +17,8 @@ import themes, { Theme } from '../style/themes';
 
 import type { editor } from 'monaco-editor';
 import { ResetFunction } from './Editor';
-import { logLanguage } from '../util/log-language';
+import { logLanguage } from '../util/languages/log';
+import { diffLanguage } from '../util/languages/diff';
 
 import * as monaco from 'monaco-editor';
 import { loader } from '@monaco-editor/react';
@@ -68,6 +69,8 @@ export default function EditorTextArea({
 
     monaco.languages.register({ id: 'log' });
     monaco.languages.setMonarchTokensProvider('log', logLanguage);
+    monaco.languages.register({ id: 'diff' });
+    monaco.languages.setMonarchTokensProvider('diff', diffLanguage);
 
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: true,
