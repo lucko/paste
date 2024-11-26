@@ -21,12 +21,10 @@ export const diffLanguage: languages.IMonarchLanguage = {
 
       // Additions
       [/^\+.*/, 'addition'],
+      [/^!.*/, 'addition'],
 
       // Deletions
       [/^-.*/, 'deletion'],
-
-      // Other additions (e.g., `!`)
-      [/^!.*/, 'addition'],
     ],
   },
 };
