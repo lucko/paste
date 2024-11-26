@@ -40,6 +40,8 @@ export default function Editor({
     pref => pref >= 10 && pref <= 22
   );
 
+  const [wordWrap, setWordWrap] = usePreference<boolean>('wordwrap-enabled', true, (value) => true)
+
   useEffect(() => {
     if (contentType) {
       setLanguage(contentType);
@@ -66,6 +68,8 @@ export default function Editor({
           setReadOnly={setReadOnly}
           theme={theme}
           setTheme={setTheme}
+          wordWrap={wordWrap}
+          setWordWrap={setWordWrap}
           zoom={zoom}
         />
         <EditorTextArea
@@ -76,6 +80,7 @@ export default function Editor({
           language={language}
           fontSize={fontSize}
           readOnly={readOnly}
+          wordWrap={wordWrap}
           resetFunction={resetFunction}
         />
       </ThemeProvider>

@@ -9,7 +9,7 @@ export default function usePreference<T>(
 ): [T, Dispatch<SetStateAction<T>>, (value: T) => boolean] {
   const [value, setValue] = useState<T>(() => {
     const pref = lsGet(id) as T;
-    if (pref && valid(pref)) {
+    if (pref !== null && pref !== undefined && valid(pref)) {
       return pref;
     } else {
       return defaultValue;
