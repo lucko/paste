@@ -17,10 +17,10 @@ export const languages = {
     'go',
     'lua',
     'swift',
-    'c'
+    'c',
   ],
   web: ['html', 'css', 'scss', 'php', 'graphql'],
-  misc: ['dockerfile', 'markdown', 'proto'],
+  misc: ['diff', 'dockerfile', 'markdown', 'proto'],
 };
 
 export const languageIds = Object.values(languages).flat(1);
