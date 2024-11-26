@@ -12,7 +12,7 @@ export const diffLanguage: languages.IMonarchLanguage = {
       // Comments
       [/Index: .*/, 'comment'],
       [/^index.*/, 'comment'],
-      [/^={3,}/, 'comment'],
+      [/={3,}/, 'comment'],
       [/^-{3}.*/, 'comment'],
       [/^\*{3} .*/, 'comment'],
       [/^\+{3}.*/, 'comment'],
@@ -23,7 +23,7 @@ export const diffLanguage: languages.IMonarchLanguage = {
       [/^\+.*/, 'addition'],
 
       // Deletions
-      [/^-+.*/, 'deletion'],
+      [/^-.*/, 'deletion'],
 
       // Other additions (e.g., `!`)
       [/^!.*/, 'addition'],
