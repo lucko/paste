@@ -27,7 +27,7 @@ export default function Editor({
 }: EditorProps) {
   const [language, setLanguage] = useState<string>('plain');
   const [readOnly, setReadOnly] = useState<boolean>(isMobile && !!pasteId);
-  const resetFunction = useRef<ResetFunction>();
+  const resetFunction = useRef<ResetFunction>(null);
 
   const [theme, setTheme] = usePreference<keyof Themes>(
     'theme',

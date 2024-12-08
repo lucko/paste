@@ -5,23 +5,17 @@ import Editor, {
   OnMount,
 } from '@monaco-editor/react';
 import history from 'history/browser';
-import React, {
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import themes, { Theme } from '../style/themes';
 
 import type { editor } from 'monaco-editor';
-import { ResetFunction } from './Editor';
-import { logLanguage } from '../util/languages/log';
 import { diffLanguage } from '../util/languages/diff';
+import { logLanguage } from '../util/languages/log';
+import { ResetFunction } from './Editor';
 
-import * as monaco from 'monaco-editor';
 import { loader } from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
 
 loader.config({ monaco });
 
@@ -33,7 +27,7 @@ export interface EditorTextAreaProps {
   language: string;
   fontSize: number;
   readOnly: boolean;
-  resetFunction: MutableRefObject<ResetFunction | undefined>;
+  resetFunction: RefObject<ResetFunction | null>;
 }
 
 export default function EditorTextArea({
@@ -254,7 +248,7 @@ function useSelectedLine(): [SelectedLine, ToggleSelectedFunction] {
 }
 
 function useLineNumberMagic(
-  editorAreaRef: React.RefObject<HTMLDivElement>,
+  editorAreaRef: RefObject<HTMLDivElement | null>,
   selected: SelectedLine,
   toggleSelected: ToggleSelectedFunction,
   forcedContent: string,

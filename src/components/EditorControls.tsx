@@ -1,6 +1,6 @@
 import copy from 'copy-to-clipboard';
 import history from 'history/browser';
-import { MutableRefObject, useCallback, useEffect, useState } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import themes, { Themes } from '../style/themes';
@@ -12,7 +12,7 @@ import MenuButton from './MenuButton';
 
 export interface EditorControlsProps {
   actualContent: string;
-  resetFunction: MutableRefObject<ResetFunction | undefined>;
+  resetFunction: RefObject<ResetFunction | null>;
   language: string;
   setLanguage: (value: string) => void;
   readOnly: boolean;
