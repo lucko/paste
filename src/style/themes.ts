@@ -1,10 +1,11 @@
-// todo: line numbers, {} [] brackets, types, variables, arguments
+// todo: line numbers, {} [] () brackets, types, variables, arguments
 import type { editor } from 'monaco-editor';
 
 import dracula from 'monaco-themes/themes/Dracula.json';
 import monokai from 'monaco-themes/themes/Monokai.json';
 import solarizedDark from 'monaco-themes/themes/Solarized-dark.json';
 import solarizedLight from 'monaco-themes/themes/Solarized-light.json';
+import { CatppuccinFlavor, flavors, ColorFormat } from '@catppuccin/palette';
 
 type Color = `#${string}`;
 
@@ -29,11 +30,10 @@ export interface Themes {
   'monokai': Theme;
   'solarized': Theme;
   'solarized-light': Theme;
-  'catppuccin-latte': Theme;
-  'catppuccin-frappe': Theme;
-  'catppuccin-macchiato': Theme;
-  'catppuccin-mocha': Theme;
-  'catppuccin-oled': Theme;
+  'latte': Theme;
+  'frappe': Theme;
+  'macchiato': Theme;
+  'mocha': Theme;
 }
 
 const themes: Themes = {
@@ -203,151 +203,10 @@ const themes: Themes = {
       diffDeletion: '#dc322f', // red
     }),
   },
-  'catppuccin-latte': {
-    id: 'catppuccin-latte',
-    primary: '#4c4f69', // text
-    secondary: '#eff1f5', // base
-    highlight: '#acb0be', // selection background
-    background: '#e6e9ef', // mantle
-    lightOrDark: 'light',
-    highlightedLine: {
-      color: '#dc8a78', // cursor
-      backgroundColor: '#acb0be', // selection background
-    },
-    editor: makeMonacoTheme({
-      base: 'vs',
-      colors: {
-        primary: '#4c4f69', // text
-        background: '#e6e9ef', // mantle
-        comment: '#9ca0b0', // comment
-        delimiter: '#7c7f93', // brace, delimeter
-        annotation: '#df8e1d', // class, metadata
-        constant: '#fe640b', // constant, number
-        number: '#fe640b', // constant, number
-        string: '#40a02b', // string
-        operator: '#04a5e5', // operator
-        keyword: '#8839ef', // keyword
-        type: '#df8e1d', // class, metadata
-        variable: '#4c4f69', // text
-      },
-    }),
-  },
-  'catppuccin-frappe': {
-    id: 'catppuccin-frappe',
-    primary: '#c6d0f5', // text
-    secondary: '#303446', // base
-    highlight: '#626880', // selection background
-    background: '#292c3c', // mantle
-    lightOrDark: 'dark',
-    highlightedLine: {
-      color: '#f2d5cf', // cursor
-      backgroundColor: '#626880', // selection background
-    },
-    editor: makeMonacoTheme({
-      base: 'vs-dark',
-      colors: {
-        primary: '#c6d0f5', // text
-        background: '#292c3c', // mantle
-        comment: '#737994', // comment
-        delimiter: '#949cbb', // brace, delimeter
-        annotation: '#e5c890', // class, metadata
-        constant: '#ef9f76', // constant, number
-        number: '#ef9f76', // constant, number
-        string: '#a6d189', // string
-        operator: '#99d1db', // operator
-        keyword: '#ca9ee6', // keyword
-        type: '#e5c890', // class, metadata
-        variable: '#c6d0f5', // text
-      },
-    }),
-  },
-  'catppuccin-macchiato': {
-    id: 'catppuccin-macchiato',
-    primary: '#cad3f5', // text
-    secondary: '#24273a', // base
-    highlight: '#5b6078', // selection background
-    background: '#1e2030', // mantle
-    lightOrDark: 'dark',
-    highlightedLine: {
-      color: '#f4dbd6', // cursor
-      backgroundColor: '#5b6078', // selection background
-    },
-    editor: makeMonacoTheme({
-      base: 'vs-dark',
-      colors: {
-        primary: '#cad3f5', // text
-        background: '#1e2030', // mantle
-        comment: '#6e738d', // comment
-        delimiter: '#939ab7', // brace, delimeter
-        annotation: '#eed49f', // class, metadata
-        constant: '#f5a97f', // constant, number
-        number: '#f5a97f', // constant, number
-        string: '#a6da95', // string
-        operator: '#91d7e3', // operator
-        keyword: '#c6a0f6', // keyword
-        type: '#eed49f', // class, metadata
-        variable: '#cad3f5', // text
-      },
-    }),
-  },
-  'catppuccin-mocha': {
-    id: 'catppuccin-mocha',
-    primary: '#cdd6f4', // text
-    secondary: '#1e1e2e', // base
-    highlight: '#585b70', // selection background
-    background: '#181825', // mantle
-    lightOrDark: 'dark',
-    highlightedLine: {
-      color: '#f5e0dc', // cursor
-      backgroundColor: '#585b70', // selection background
-    },
-    editor: makeMonacoTheme({
-      base: 'vs-dark',
-      colors: {
-        primary: '#cdd6f4', // text
-        background: '#181825', // mantle
-        comment: '#6c7086', // comment
-        delimiter: '#9399b2', // brace, delimeter
-        annotation: '#f9e2af', // class, metadata
-        constant: '#fab387', // constant, number
-        number: '#fab387', // constant, number
-        string: '#a6e3a1', // string
-        operator: '#89dceb', // operator
-        keyword: '#cba6f7', // keyword
-        type: '#f9e2af', // class, metadata
-        variable: '#cdd6f4', // text
-      },
-    }),
-  },
-  'catppuccin-oled': {
-    id: 'catppuccin-oled',
-    primary: '#cdd6f4', // text
-    secondary: '#020202', // base
-    highlight: '#585b70', // selection background
-    background: '#010101', // mantle
-    lightOrDark: 'dark',
-    highlightedLine: {
-      color: '#f5e0dc', // cursor
-      backgroundColor: '#585b70', // selection background
-    },
-    editor: makeMonacoTheme({
-      base: 'vs-dark',
-      colors: {
-        primary: '#cdd6f4', // text
-        background: '#010101', // mantle
-        comment: '#6c7086', // comment
-        delimiter: '#9399b2', // brace, delimeter
-        annotation: '#f9e2af', // class, metadata
-        constant: '#fab387', // constant, number
-        number: '#fab387', // constant, number
-        string: '#a6e3a1', // string
-        operator: '#89dceb', // operator
-        keyword: '#cba6f7', // keyword
-        type: '#f9e2af', // class, metadata
-        variable: '#cdd6f4', // text
-      },
-    }),
-  },
+  'latte': createCatppuccinTheme(flavors.latte),
+  'frappe': createCatppuccinTheme(flavors.frappe),
+  'macchiato': createCatppuccinTheme(flavors.macchiato),
+  'mocha': createCatppuccinTheme(flavors.mocha),
 };
 
 export default themes;
@@ -452,4 +311,59 @@ export function addExtraColors(
     ]
   );
   return theme;
+}
+
+export function createCatppuccinTheme(flavor: CatppuccinFlavor): Theme {
+  const color = (color: ColorFormat) => color.hex as Color;
+  const nameToId: Record<string, string> = {
+    [flavors.latte.name]: 'latte',
+    [flavors.frappe.name]: 'frappe',
+    [flavors.macchiato.name]: 'macchiato',
+    [flavors.mocha.name]: 'mocha',
+  };
+
+  const editorTheme = makeMonacoTheme({
+    base: flavor.dark ? 'vs-dark' : 'vs',
+    colors: {
+      // Monaco
+      primary: color(flavor.colors.text),
+      background: color(flavor.colors.mantle),
+      string: color(flavor.colors.green),
+      comment: color(flavor.colors.overlay0),
+      delimiter: color(flavor.colors.overlay2),
+      annotation: color(flavor.colors.yellow),
+      constant: color(flavor.colors.peach),
+      number: color(flavor.colors.peach),
+      operator: color(flavor.colors.sky),
+      keyword: color(flavor.colors.mauve),
+      type: color(flavor.colors.yellow),
+      variable: color(flavor.colors.text),
+
+      // Log Files
+      logDate: color(flavor.colors.mauve),
+      logInfo: color(flavor.colors.green),
+      logWarning: color(flavor.colors.yellow),
+      logError: color(flavor.colors.red),
+      logException: color(flavor.colors.yellow),
+
+      // Diff Files
+      diffMeta: color(flavor.colors.sky),
+      diffAddition: color(flavor.colors.green),
+      diffDeletion: color(flavor.colors.red),
+    }
+  });
+
+  return {
+    id: nameToId[flavor.name],
+    lightOrDark: flavor.dark ? 'dark' : 'light',
+    primary: color(flavor.colors.text),
+    secondary: color(flavor.colors.base),
+    highlight: color(flavor.colors.surface0),
+    background: color(flavor.colors.mantle),
+    highlightedLine: {
+      color: color(flavor.colors.rosewater),
+      backgroundColor: color(flavor.colors.surface2)
+    },
+    editor: editorTheme
+  };
 }
