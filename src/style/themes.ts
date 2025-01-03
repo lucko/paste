@@ -1,4 +1,3 @@
-// todo: line numbers, {} [] () brackets, types, variables, arguments
 import type { editor } from 'monaco-editor';
 
 import dracula from 'monaco-themes/themes/Dracula.json';
@@ -8,6 +7,7 @@ import solarizedLight from 'monaco-themes/themes/Solarized-light.json';
 import { CatppuccinFlavor, flavors, ColorFormat } from '@catppuccin/palette';
 
 type Color = `#${string}`;
+type Extra = Record<string, Color>;
 
 export interface Theme {
   id: string;
@@ -74,7 +74,7 @@ const themes: Themes = {
         diffAddition: '#3fb950', // green.3
         diffDeletion: '#f85149', // red.4
       },
-    }),
+    }, {}),
   },
   'light': {
     id: 'light',
@@ -113,7 +113,7 @@ const themes: Themes = {
         diffAddition: '#2da44e', // green.4
         diffDeletion: '#cf222e', // red.5
       },
-    }),
+    }, {}),
   },
   'dracula': {
     id: 'dracula',
@@ -241,7 +241,8 @@ interface MonacoThemeProps {
 }
 
 export function makeMonacoTheme(
-  props: MonacoThemeProps
+  props: MonacoThemeProps,
+  extra: Extra
 ): editor.IStandaloneThemeData {
   const colors = Object.fromEntries(
     Object.entries(props.colors).map(([key, color]) => [
@@ -249,6 +250,13 @@ export function makeMonacoTheme(
       color.substring(1),
     ])
   ) as Record<keyof MonacoThemeProps['colors'], string>;
+
+  let editorColors: Extra = {
+    'editor.background': `#${colors.background}`,
+    'editor.foreground': `#${colors.primary}`,
+  };
+
+  editorColors = { ...editorColors, ...extra };
 
   return {
     base: props.base,
@@ -284,10 +292,7 @@ export function makeMonacoTheme(
       { token: 'addition.diff', foreground: colors.diffAddition },
       { token: 'deletion.diff', foreground: colors.diffDeletion },
     ],
-    colors: {
-      'editor.background': `#${colors.background}`,
-      'editor.foreground': `#${colors.primary}`,
-    },
+    colors: editorColors
   };
 }
 
@@ -329,7 +334,7 @@ export function createCatppuccinTheme(flavor: CatppuccinFlavor): Theme {
       primary: color(flavor.colors.text),
       background: color(flavor.colors.mantle),
       string: color(flavor.colors.green),
-      comment: color(flavor.colors.overlay0),
+      comment: color(flavor.colors.overlay2),
       delimiter: color(flavor.colors.overlay2),
       annotation: color(flavor.colors.yellow),
       constant: color(flavor.colors.peach),
@@ -351,6 +356,10 @@ export function createCatppuccinTheme(flavor: CatppuccinFlavor): Theme {
       diffAddition: color(flavor.colors.green),
       diffDeletion: color(flavor.colors.red),
     }
+  }, {
+    "editorBracketHighlight.foreground1": color(flavor.colors.overlay2),
+    "editorBracketHighlight.foreground2": color(flavor.colors.overlay2),
+    "editorBracketHighlight.foreground3": color(flavor.colors.overlay2)
   });
 
   return {
