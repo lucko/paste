@@ -1,11 +1,13 @@
 import type { editor } from 'monaco-editor';
 
+import { CatppuccinFlavor, ColorFormat, flavors } from '@catppuccin/palette';
 import dracula from 'monaco-themes/themes/Dracula.json';
 import monokai from 'monaco-themes/themes/Monokai.json';
 import solarizedDark from 'monaco-themes/themes/Solarized-dark.json';
 import solarizedLight from 'monaco-themes/themes/Solarized-light.json';
 
 type Color = `#${string}`;
+type ColorRecord = Record<string, Color>;
 
 export interface Theme {
   id: string;
@@ -28,6 +30,10 @@ export interface Themes {
   'monokai': Theme;
   'solarized': Theme;
   'solarized-light': Theme;
+  'latte': Theme;
+  'frappe': Theme;
+  'macchiato': Theme;
+  'mocha': Theme;
 }
 
 const themes: Themes = {
@@ -44,31 +50,34 @@ const themes: Themes = {
       backgroundColor: '#161b22', // canvas.overlay
     },
 
-    editor: makeMonacoTheme({
-      base: 'vs-dark',
-      colors: {
-        primary: '#c9d1d9', // fg.default
-        background: '#0d1117', // canvas.default
-        comment: '#8b949e',
-        delimiter: '#d2a8ff',
-        annotation: '#a5d6ff',
-        constant: '#ff7b72',
-        number: '#f2cc60',
-        string: '#79c0ff',
-        operator: '#ff7b72',
-        keyword: '#ff7b72',
-        type: '#ffa657',
-        variable: '#ffa657',
-        logInfo: '#3fb950', // green.3
-        logError: '#f85149', // red.4
-        logWarning: '#d29922', // yellow.3
-        logDate: '#33B3AE', // teal.3
-        logException: '#f8e3a1', // yellow.0
-        diffMeta: '#33B3AE', // teal.3
-        diffAddition: '#3fb950', // green.3
-        diffDeletion: '#f85149', // red.4
+    editor: makeMonacoTheme(
+      {
+        base: 'vs-dark',
+        colors: {
+          primary: '#c9d1d9', // fg.default
+          background: '#0d1117', // canvas.default
+          comment: '#8b949e',
+          delimiter: '#d2a8ff',
+          annotation: '#a5d6ff',
+          constant: '#ff7b72',
+          number: '#f2cc60',
+          string: '#79c0ff',
+          operator: '#ff7b72',
+          keyword: '#ff7b72',
+          type: '#ffa657',
+          variable: '#ffa657',
+          logInfo: '#3fb950', // green.3
+          logError: '#f85149', // red.4
+          logWarning: '#d29922', // yellow.3
+          logDate: '#33B3AE', // teal.3
+          logException: '#f8e3a1', // yellow.0
+          diffMeta: '#33B3AE', // teal.3
+          diffAddition: '#3fb950', // green.3
+          diffDeletion: '#f85149', // red.4
+        },
       },
-    }),
+      {}
+    ),
   },
   'light': {
     id: 'light',
@@ -83,31 +92,34 @@ const themes: Themes = {
       backgroundColor: '#e0f6ff',
     },
 
-    editor: makeMonacoTheme({
-      base: 'vs',
-      colors: {
-        primary: '#000000',
-        background: '#ffffff',
-        comment: '#708090',
-        delimiter: '#999999',
-        annotation: '#999999',
-        constant: '#990055',
-        number: '#990055',
-        string: '#669900',
-        operator: '#9a6e3a',
-        keyword: '#0077aa',
-        type: '#DD4A68',
-        variable: '#ee9900',
-        logInfo: '#2da44e', // green.4
-        logError: '#cf222e', // red.5
-        logWarning: '#d4a72c', // yellow.3
-        logDate: '#136061', // teal.6
-        logException: '#7d4e00', // yellow.6
-        diffMeta: '#136061', // teal.6
-        diffAddition: '#2da44e', // green.4
-        diffDeletion: '#cf222e', // red.5
+    editor: makeMonacoTheme(
+      {
+        base: 'vs',
+        colors: {
+          primary: '#000000',
+          background: '#ffffff',
+          comment: '#708090',
+          delimiter: '#999999',
+          annotation: '#999999',
+          constant: '#990055',
+          number: '#990055',
+          string: '#669900',
+          operator: '#9a6e3a',
+          keyword: '#0077aa',
+          type: '#DD4A68',
+          variable: '#ee9900',
+          logInfo: '#2da44e', // green.4
+          logError: '#cf222e', // red.5
+          logWarning: '#d4a72c', // yellow.3
+          logDate: '#136061', // teal.6
+          logException: '#7d4e00', // yellow.6
+          diffMeta: '#136061', // teal.6
+          diffAddition: '#2da44e', // green.4
+          diffDeletion: '#cf222e', // red.5
+        },
       },
-    }),
+      {}
+    ),
   },
   'dracula': {
     id: 'dracula',
@@ -197,6 +209,10 @@ const themes: Themes = {
       diffDeletion: '#dc322f', // red
     }),
   },
+  'latte': createCatppuccinTheme(flavors.latte),
+  'frappe': createCatppuccinTheme(flavors.frappe),
+  'macchiato': createCatppuccinTheme(flavors.macchiato),
+  'mocha': createCatppuccinTheme(flavors.mocha),
 };
 
 export default themes;
@@ -231,7 +247,8 @@ interface MonacoThemeProps {
 }
 
 export function makeMonacoTheme(
-  props: MonacoThemeProps
+  props: MonacoThemeProps,
+  extraColors: ColorRecord
 ): editor.IStandaloneThemeData {
   const colors = Object.fromEntries(
     Object.entries(props.colors).map(([key, color]) => [
@@ -239,6 +256,11 @@ export function makeMonacoTheme(
       color.substring(1),
     ])
   ) as Record<keyof MonacoThemeProps['colors'], string>;
+
+  const editorColors: ColorRecord = {
+    'editor.background': `#${colors.background}`,
+    'editor.foreground': `#${colors.primary}`,
+  };
 
   return {
     base: props.base,
@@ -274,10 +296,7 @@ export function makeMonacoTheme(
       { token: 'addition.diff', foreground: colors.diffAddition },
       { token: 'deletion.diff', foreground: colors.diffDeletion },
     ],
-    colors: {
-      'editor.background': `#${colors.background}`,
-      'editor.foreground': `#${colors.primary}`,
-    },
+    colors: { ...editorColors, ...extraColors },
   };
 }
 
@@ -301,4 +320,66 @@ export function addExtraColors(
     ]
   );
   return theme;
+}
+
+export function createCatppuccinTheme(flavor: CatppuccinFlavor): Theme {
+  const color = (color: ColorFormat) => color.hex as Color;
+  const nameToId: Record<string, string> = {
+    [flavors.latte.name]: 'latte',
+    [flavors.frappe.name]: 'frappe',
+    [flavors.macchiato.name]: 'macchiato',
+    [flavors.mocha.name]: 'mocha',
+  };
+
+  const editorTheme = makeMonacoTheme(
+    {
+      base: flavor.dark ? 'vs-dark' : 'vs',
+      colors: {
+        // Monaco
+        primary: color(flavor.colors.text),
+        background: color(flavor.colors.mantle),
+        string: color(flavor.colors.green),
+        comment: color(flavor.colors.overlay2),
+        delimiter: color(flavor.colors.overlay2),
+        annotation: color(flavor.colors.yellow),
+        constant: color(flavor.colors.peach),
+        number: color(flavor.colors.peach),
+        operator: color(flavor.colors.sky),
+        keyword: color(flavor.colors.mauve),
+        type: color(flavor.colors.yellow),
+        variable: color(flavor.colors.text),
+
+        // Log Files
+        logDate: color(flavor.colors.mauve),
+        logInfo: color(flavor.colors.green),
+        logWarning: color(flavor.colors.yellow),
+        logError: color(flavor.colors.red),
+        logException: color(flavor.colors.yellow),
+
+        // Diff Files
+        diffMeta: color(flavor.colors.sky),
+        diffAddition: color(flavor.colors.green),
+        diffDeletion: color(flavor.colors.red),
+      },
+    },
+    {
+      'editorBracketHighlight.foreground1': color(flavor.colors.overlay2),
+      'editorBracketHighlight.foreground2': color(flavor.colors.overlay2),
+      'editorBracketHighlight.foreground3': color(flavor.colors.overlay2),
+    }
+  );
+
+  return {
+    id: nameToId[flavor.name],
+    lightOrDark: flavor.dark ? 'dark' : 'light',
+    primary: color(flavor.colors.text),
+    secondary: color(flavor.colors.base),
+    highlight: color(flavor.colors.surface0),
+    background: color(flavor.colors.mantle),
+    highlightedLine: {
+      color: color(flavor.colors.rosewater),
+      backgroundColor: color(flavor.colors.surface2),
+    },
+    editor: editorTheme,
+  };
 }
