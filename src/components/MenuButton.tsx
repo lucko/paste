@@ -19,7 +19,7 @@ export default function MenuButton<T extends string>({
 
   // close the menu when a click is made elsewhere
   useEffect(() => {
-    const listener = (e: MouseEvent) => setOpen(false);
+    const listener = () => setOpen(false);
     window.addEventListener('click', listener);
     return () => window.removeEventListener('click', listener);
   }, [setOpen]);

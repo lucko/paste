@@ -31,7 +31,7 @@ export async function loadFromBytebin(id: string): Promise<LoadResult> {
     } else {
       return { ok: false };
     }
-  } catch (e) {
+  } catch {
     return { ok: false };
   }
 }

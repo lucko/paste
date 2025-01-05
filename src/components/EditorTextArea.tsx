@@ -5,7 +5,14 @@ import Editor, {
   OnMount,
 } from '@monaco-editor/react';
 import history from 'history/browser';
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  MutableRefObject,
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import styled from 'styled-components';
 import themes, { Theme } from '../style/themes';
 
@@ -17,6 +24,34 @@ import { ResetFunction } from './Editor';
 import { loader } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+
+self.MonacoEnvironment = {
+  getWorker(_: string, label: string): Promise<Worker> | Worker {
+    switch (label) {
+      case 'json':
+        return new jsonWorker();
+      case 'css':
+      case 'scss':
+      case 'less':
+        return new cssWorker();
+      case 'html':
+      case 'handlebars':
+      case 'razor':
+        return new htmlWorker();
+      case 'typescript':
+      case 'javascript':
+        return new tsWorker();
+      default:
+        return new editorWorker();
+    }
+  },
+};
+
 loader.config({ monaco });
 
 export interface EditorTextAreaProps {
@@ -27,7 +62,7 @@ export interface EditorTextAreaProps {
   language: string;
   fontSize: number;
   readOnly: boolean;
-  resetFunction: RefObject<ResetFunction | null>;
+  resetFunction: MutableRefObject<ResetFunction | null>;
 }
 
 export default function EditorTextArea({

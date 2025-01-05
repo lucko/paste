@@ -1,4 +1,3 @@
-import { get as lsGet, remove as lsRemove, set as lsSet } from 'local-storage';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 // hook used to load "preference" settings from local storage, or fall back to a default value.
@@ -8,7 +7,8 @@ export default function usePreference<T>(
   valid: (value: T) => boolean
 ): [T, Dispatch<SetStateAction<T>>, (value: T) => boolean] {
   const [value, setValue] = useState<T>(() => {
-    const pref = lsGet(id) as T;
+    const prefRaw = localStorage.getItem(id);
+    const pref = prefRaw !== null ? (JSON.parse(prefRaw) as T) : undefined;
     if (pref && valid(pref)) {
       return pref;
     } else {
@@ -18,9 +18,9 @@ export default function usePreference<T>(
 
   useEffect(() => {
     if (value === defaultValue) {
-      lsRemove(id);
+      localStorage.removeItem(id);
     } else {
-      lsSet(id, value);
+      localStorage.setItem(id, JSON.stringify(value));
     }
   }, [value, id, defaultValue]);
 

@@ -2,61 +2,43 @@
   "name": "paste",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "format": "prettier --write '**/*.ts' '**/*.tsx' '**/*.css'"
+  },
   "dependencies": {
-    "@catppuccin/palette": "^1.7.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "@monaco-editor/react": "^4.6.0",
+    "@catppuccin/palette": "^1.7.1",
     "copy-to-clipboard": "^3.3.3",
     "history": "^5.3.0",
-    "local-storage": "^2.0.0",
     "monaco-editor": "^0.52.0",
     "monaco-themes": "^0.4.4",
     "pako": "^2.1.0",
-    "react": "^19.0.0",
     "react-device-detect": "^2.2.3",
-    "react-dom": "^19.0.0",
-    "react-scripts": "^5.0.1",
     "styled-components": "^6.1.13",
-    "typescript": "^5.7.2",
     "whatwg-mimetype": "^3.0.0"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^16.1.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^18.11.9",
+    "@eslint/js": "^9.17.0",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "@types/pako": "^2.0.3",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
     "@types/whatwg-mimetype": "^3.0.2",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^15.14.0",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.5",
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "format": "prettier --write '**/*.ts' '**/*.tsx' '**/*.css'",
-    "compile": "tsc"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
   }
 }
