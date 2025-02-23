@@ -1,9 +1,10 @@
-version: '3.8'
-
 services:
+
+  # frontend service
   paste:
     image: ghcr.io/lucko/paste
 
+  # backend service
   bytebin:
     image: ghcr.io/lucko/bytebin
     volumes:
@@ -11,6 +12,7 @@ services:
     environment:
       BYTEBIN_MISC_KEYLENGTH: 5
 
+  # reverse proxy
   nginx:
     image: nginx:alpine
     command: ['nginx', '-g', 'daemon off;']

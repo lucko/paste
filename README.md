@@ -4,7 +4,7 @@
 
 **paste is a simple web app for writing & sharing code.** It's my own take on conventional pastebin sites like _pastebin.com_ or _hastebin_.
 
-Anyone can use paste! The official/public instance can be accessed using the endpoints listed below, but you can also [host your own](#host-your-own) if you like!
+Anyone can use paste! The official/public instance can be accessed using the endpoints listed below, but you can also [host your own](#self-hosting) if you like!
 
 ##### 1) In a Web Browser
 Just go to https://pastes.dev!
@@ -90,28 +90,13 @@ The API is powered by the [bytebin](https://github.com/lucko/bytebin) service, s
 
 ___
 
-### Host your own
+### Self-hosting
 
-It's quite simple to host your own version.
+The easiest way to self-host is using Docker (& Docker Compose). You can run the following commands to get started:
 
 ```bash
 git clone https://github.com/lucko/paste
 cd paste
-yarn install
-
-# Outputs html/css/js files to /build
-yarn build
-
-# Start a webserver for testing/development
-yarn start
-```
-
-You can then follow the [create-react-app deployment documentation](https://create-react-app.dev/docs/deployment/) for how to host the build output. I personally recommend deploying to the cloud using a service like Netlify instead of hosting on your own webserver.
-
-If you really want to self-host (including the bytebin data storage part), I suggest using Docker:
-
-```bash
-git clone https://github.com/lucko/paste
 docker compose up -d
 ```
 
