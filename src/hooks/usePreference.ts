@@ -9,7 +9,7 @@ export default function usePreference<T>(
   const [value, setValue] = useState<T>(() => {
     const prefRaw = localStorage.getItem(id);
     const pref = prefRaw !== null ? (JSON.parse(prefRaw) as T) : undefined;
-    if (pref && valid(pref)) {
+    if (pref !== null && pref !== undefined && valid(pref)) {
       return pref;
     } else {
       return defaultValue;
