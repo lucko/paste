@@ -23,7 +23,6 @@ export default function MenuButton<T extends string>({
   }>({ top: 0, left: 0 });
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
-  // close the menu when a click is made elsewhere
   useEffect(() => {
     const listener = () => setOpen(false);
     window.addEventListener('click', listener);
@@ -51,8 +50,8 @@ export default function MenuButton<T extends string>({
     setValue(id);
   }
 
-  function make(ids: T[]) {
-    return ids.map(id => (
+  function make(idsToMake: T[]) {
+    return [...idsToMake].sort((a, b) => a.localeCompare(b)).map(id => (
       <li
         key={id}
         className={id === value ? 'selected' : undefined}
@@ -67,14 +66,15 @@ export default function MenuButton<T extends string>({
   if (Array.isArray(ids)) {
     items = make(ids);
   } else {
-    items = Object.entries(ids).map(([title, values]) =>
+    items = Object.entries(ids)
+      .sort(([titleA], [titleB]) => titleA.localeCompare(titleB))
+      .map(([title, values]) =>
       [
         <li className="title" key={title} onClick={e => e.stopPropagation()}>
-          [{title}]
+          {title.charAt(0).toUpperCase() + title.slice(1)}
         </li>,
       ]
-        .concat(make(values))
-        .flat()
+        .concat(make(values as T[]))
     );
   }
 
@@ -104,37 +104,68 @@ const Menu = styled.ul`
   max-height: calc(100vh - 2em);
   overflow: auto;
   z-index: 20;
+  min-width: 180px; 
+  border: 1px solid ${props => props.theme.secondary};
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 
   > li {
     cursor: pointer;
+    padding: 0.3em 1em 0.3em 2em; 
+    color: ${props => props.theme.primary};
   }
 
   > li.title {
-    text-align: center;
-    padding: 0.7em 0 0.3em 0;
+    text-align: left;
+    padding: 0.5em 1em;
     cursor: initial;
     font-weight: bold;
+    color: ${props => props.theme.primary};
+    background-color: ${props => props.theme.secondary};
+    border-bottom: 1px solid ${props => props.theme.highlight};
+    margin-top: 0.25em; 
+  }
+
+  > li.title:first-child {
+    margin-top: 0; 
   }
 
   > li.title:hover {
-    background-color: inherit;
+    background-color: ${props => props.theme.secondary}; 
   }
 
   > li.selected {
+    background-color: ${props => darken(0.1, props.theme.highlight)}; 
+    font-weight: bold; 
     &::before {
-      content: '*';
-      font-weight: bold;
+      content: '* '; 
+      font-weight: bold; 
+      position: absolute;
+      left: 0.75em; 
     }
-
-    padding-left: calc(1em - 1ch);
-    font-weight: bold;
   }
 
-  > li {
-    padding: 0em 1em 0.05em 1em;
-  }
-
-  > li:hover {
-    background-color: ${props => props.theme.secondary};
+  > li:not(.title):hover {
+    background-color: ${props => darken(0.05, props.theme.highlight)}; 
   }
 `;
+
+const darken = (factor: number, color: string): string => {
+  if (!color.startsWith('#') || (color.length !== 7 && color.length !== 4)) {
+    return color; 
+  }
+  let hex = color.substring(1);
+  if (hex.length === 3) {
+    hex = hex.split('').map(char => char + char).join('');
+  }
+
+  const num = parseInt(hex, 16);
+  let r = (num >> 16) & 0xFF;
+  let g = (num >> 8) & 0xFF;
+  let b = num & 0xFF;
+
+  r = Math.max(0, Math.min(255, Math.floor(r * (1 - factor))));
+  g = Math.max(0, Math.min(255, Math.floor(g * (1 - factor))));
+  b = Math.max(0, Math.min(255, Math.floor(b * (1 - factor))));
+
+  return `#${(r).toString(16).padStart(2, '0')}${(g).toString(16).padStart(2, '0')}${(b).toString(16).padStart(2, '0')}`;
+};
