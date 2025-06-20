@@ -23,7 +23,7 @@ export default function App() {
     'dark',
     pref => !!themes[pref]
   );
-  const [showAbout, setShowAbout] = useState<boolean>(true);
+  const [showAbout, setShowAbout] = useState<boolean>(false);
 
   function setContent(content: string) {
     setActualContent(content);
