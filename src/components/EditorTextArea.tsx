@@ -13,7 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import themes, { Theme } from '../style/themes';
 
 import type { editor } from 'monaco-editor';
@@ -58,7 +58,6 @@ export interface EditorTextAreaProps {
   forcedContent: string;
   actualContent: string;
   setActualContent: (value: string) => void;
-  theme: Theme;
   language: string;
   fontSize: number;
   readOnly: boolean;
@@ -70,7 +69,6 @@ export default function EditorTextArea({
   forcedContent,
   actualContent,
   setActualContent,
-  theme,
   language,
   fontSize,
   readOnly,
@@ -81,6 +79,7 @@ export default function EditorTextArea({
   const [monaco, setMonaco] = useState<Monaco>();
   const [selected, toggleSelected] = useSelectedLine();
   const editorAreaRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
 
   useLineNumberMagic(
     editorAreaRef,

@@ -15,6 +15,7 @@ export interface Theme {
   secondary: Color;
   highlight: Color;
   background: Color;
+  logo: Color;
   lightOrDark: 'light' | 'dark';
   highlightedLine: {
     color: Color;
@@ -43,6 +44,7 @@ const themes: Themes = {
     secondary: '#010409', // canvas.inset
     highlight: '#161b22', // canvas.overlay
     background: '#0d1117', // canvas.default
+    logo: '#d2a8ff',
     lightOrDark: 'dark',
 
     highlightedLine: {
@@ -85,6 +87,7 @@ const themes: Themes = {
     secondary: '#022550',
     highlight: '#36368c',
     background: '#ffffff',
+    logo: '#022550',
     lightOrDark: 'light',
 
     highlightedLine: {
@@ -127,6 +130,7 @@ const themes: Themes = {
     secondary: '#383a59',
     highlight: '#44475a',
     background: '#282a36',
+    logo: '#BD93F9', // purple
     lightOrDark: 'dark',
     highlightedLine: {
       color: '#586e75',
@@ -149,6 +153,7 @@ const themes: Themes = {
     secondary: '#222218',
     highlight: '#49483E',
     background: '#272822',
+    logo: '#f92672', // red
     lightOrDark: 'dark',
     highlightedLine: {
       color: '#49483E',
@@ -171,6 +176,7 @@ const themes: Themes = {
     secondary: '#073642', // base02
     highlight: '#002b36', // base03
     background: '#002B36', // base03
+    logo: '#dc322f', // red
     lightOrDark: 'dark',
     highlightedLine: {
       color: '#93a1a1', // base1
@@ -193,6 +199,7 @@ const themes: Themes = {
     secondary: '#eee8d5', // base2
     highlight: '#FDF6E3', // base3
     background: '#FDF6E3', // base3
+    logo: '#dc322f', // red
     lightOrDark: 'light',
     highlightedLine: {
       color: '#586e75', // base01
@@ -380,6 +387,7 @@ export function createCatppuccinTheme(flavor: CatppuccinFlavor): Theme {
       color: color(flavor.colors.rosewater),
       backgroundColor: color(flavor.colors.surface2),
     },
+    logo: color(flavor.colors.mauve),
     editor: editorTheme,
   };
 }

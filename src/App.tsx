@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
+import { ThemeProvider } from 'styled-components';
+import About from './components/About.tsx';
 import Editor from './components/Editor';
+import usePreference from './hooks/usePreference.ts';
+import themes, { Themes } from './style/themes.ts';
 import { loadFromBytebin } from './util/storage';
 
 const INITIAL = Symbol();
@@ -14,6 +18,12 @@ export default function App() {
   const [forcedContent, setForcedContent] = useState<string>('');
   const [actualContent, setActualContent] = useState<string>('');
   const [contentType, setContentType] = useState<string>();
+  const [theme, setTheme] = usePreference<keyof Themes>(
+    'theme',
+    'dark',
+    pref => !!themes[pref]
+  );
+  const [showAbout, setShowAbout] = useState<boolean>(true);
 
   function setContent(content: string) {
     setActualContent(content);
@@ -40,13 +50,19 @@ export default function App() {
   }, [pasteId, state]);
 
   return (
-    <Editor
-      forcedContent={forcedContent}
-      actualContent={actualContent}
-      setActualContent={setActualContent}
-      contentType={contentType}
-      pasteId={pasteId}
-    />
+    <ThemeProvider theme={themes[theme]}>
+      <Editor
+        forcedContent={forcedContent}
+        actualContent={actualContent}
+        setActualContent={setActualContent}
+        contentType={contentType}
+        pasteId={pasteId}
+        theme={theme}
+        setTheme={setTheme}
+        setShowAbout={setShowAbout}
+      />
+      {showAbout && <About setVisible={setShowAbout} />}
+    </ThemeProvider>
   );
 }
 

@@ -22,6 +22,7 @@ export interface EditorControlsProps {
   wordWrap: boolean;
   setWordWrap: (value: boolean) => void;
   zoom: (delta: number) => void;
+  setShowAbout: (value: boolean) => void;
 }
 
 export default function EditorControls({
@@ -36,6 +37,7 @@ export default function EditorControls({
   wordWrap,
   setWordWrap,
   zoom,
+  setShowAbout,
 }: EditorControlsProps) {
   const [saving, setSaving] = useState<boolean>(false);
   const [recentlySaved, setRecentlySaved] = useState<boolean>(false);
@@ -43,6 +45,10 @@ export default function EditorControls({
   useEffect(() => {
     setRecentlySaved(false);
   }, [actualContent, language]);
+
+  const showAbout = useCallback(() => {
+    setShowAbout(true);
+  }, [setShowAbout]);
 
   const save = useCallback(() => {
     if (!actualContent || recentlySaved) {
@@ -126,15 +132,7 @@ export default function EditorControls({
           setValue={setTheme}
           ids={Object.keys(themes) as (keyof Themes)[]}
         />
-        <Button
-          className="optional"
-          as="a"
-          href="https://github.com/lucko/paste#readme"
-          target="_blank"
-          rel="noreferrer"
-        >
-          [about]
-        </Button>
+        <Button onClick={showAbout}>[about]</Button>
       </Section>
     </Header>
   );

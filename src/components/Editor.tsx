@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
-import { ThemeProvider } from 'styled-components';
 
 import usePreference from '../hooks/usePreference';
-import themes, { Themes } from '../style/themes';
+import { Themes } from '../style/themes.ts';
 import EditorControls from './EditorControls';
 import EditorGlobalStyle from './EditorGlobalStyle';
 import EditorTextArea from './EditorTextArea';
@@ -14,6 +13,9 @@ export interface EditorProps {
   setActualContent: (value: string) => void;
   contentType?: string;
   pasteId?: string;
+  theme: keyof Themes;
+  setTheme: (value: keyof Themes) => void;
+  setShowAbout: (value: boolean) => void;
 }
 
 export type ResetFunction = () => void;
@@ -24,16 +26,14 @@ export default function Editor({
   setActualContent,
   contentType,
   pasteId,
+  theme,
+  setTheme,
+  setShowAbout,
 }: EditorProps) {
   const [language, setLanguage] = useState<string>('plain');
   const [readOnly, setReadOnly] = useState<boolean>(isMobile && !!pasteId);
   const resetFunction = useRef<ResetFunction>(null);
 
-  const [theme, setTheme] = usePreference<keyof Themes>(
-    'theme',
-    'dark',
-    pref => !!themes[pref]
-  );
   const [fontSize, setFontSize, fontSizeCheck] = usePreference<number>(
     'fontsize',
     16,
@@ -61,33 +61,31 @@ export default function Editor({
 
   return (
     <>
-      <ThemeProvider theme={themes[theme]}>
-        <EditorGlobalStyle />
-        <EditorControls
-          actualContent={actualContent}
-          resetFunction={resetFunction}
-          language={language}
-          setLanguage={setLanguage}
-          readOnly={readOnly}
-          setReadOnly={setReadOnly}
-          theme={theme}
-          setTheme={setTheme}
-          wordWrap={wordWrap}
-          setWordWrap={setWordWrap}
-          zoom={zoom}
-        />
-        <EditorTextArea
-          forcedContent={forcedContent}
-          actualContent={actualContent}
-          setActualContent={setActualContent}
-          theme={themes[theme]}
-          language={language}
-          fontSize={fontSize}
-          readOnly={readOnly}
-          wordWrap={wordWrap}
-          resetFunction={resetFunction}
-        />
-      </ThemeProvider>
+      <EditorGlobalStyle />
+      <EditorControls
+        actualContent={actualContent}
+        resetFunction={resetFunction}
+        language={language}
+        setLanguage={setLanguage}
+        readOnly={readOnly}
+        setReadOnly={setReadOnly}
+        theme={theme}
+        setTheme={setTheme}
+        wordWrap={wordWrap}
+        setWordWrap={setWordWrap}
+        zoom={zoom}
+        setShowAbout={setShowAbout}
+      />
+      <EditorTextArea
+        forcedContent={forcedContent}
+        actualContent={actualContent}
+        setActualContent={setActualContent}
+        language={language}
+        fontSize={fontSize}
+        readOnly={readOnly}
+        wordWrap={wordWrap}
+        resetFunction={resetFunction}
+      />
     </>
   );
 }
