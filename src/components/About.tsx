@@ -166,12 +166,13 @@ const AboutPanel = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
+  padding: 10px;
   max-width: 650px;
+  max-height: 100vh;
+  overflow-y: auto;
 
   color: ${props => props.theme.primary};
   background-color: ${props => props.theme.secondary};
-
-  padding: 10px;
 `;
 
 const BannerContainer = styled.div`
