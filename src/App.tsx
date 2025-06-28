@@ -5,6 +5,7 @@ import Editor from './components/Editor';
 import usePreference from './hooks/usePreference.ts';
 import themes, { Themes } from './style/themes.ts';
 import { loadFromBytebin } from './util/storage';
+import { useQueryRouting } from './util/storage';
 
 const INITIAL = Symbol();
 const LOADING = Symbol();
@@ -81,10 +82,10 @@ function get404Message(pasteId: string) {
 }
 
 function getPasteIdFromUrl() {
-  const path = window.location.pathname;
-  if (path && /^\/[a-zA-Z0-9]+$/.test(path)) {
-    return path.substring(1);
-  } else {
-    return undefined;
+  if (useQueryRouting) {
+    return new URLSearchParams(window.location.search).get('id') ?? undefined;
   }
+
+  const path = window.location.pathname;
+  return /^\/[a-zA-Z0-9]+$/.test(path) ? path.substring(1) : undefined;
 }
