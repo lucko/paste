@@ -5,7 +5,7 @@ import Editor from './components/Editor';
 import usePreference from './hooks/usePreference.ts';
 import themes, { Themes } from './style/themes.ts';
 import { loadFromBytebin } from './util/storage';
-import { useQueryRouting } from './util/storage';
+import { useQueryRouting } from './util/constants';
 
 const INITIAL = Symbol();
 const LOADING = Symbol();
