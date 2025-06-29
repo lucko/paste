@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import themes, { Themes } from '../style/themes';
 import { languages } from '../util/highlighting';
 import { saveToBytebin } from '../util/storage';
+import { useQueryRouting } from '../util/constants';
 import Button from './Button';
 import { ResetFunction } from './Editor';
 import MenuButton from './MenuButton';
@@ -59,9 +60,15 @@ export default function EditorControls({
       setSaving(false);
       setRecentlySaved(true);
       if (pasteId) {
-        history.replace({
-          pathname: pasteId,
-        });
+        if (useQueryRouting) {
+          history.replace({
+            search: `?id=${pasteId}`,
+          });
+        } else {
+          history.replace({
+            pathname: pasteId,
+          });
+        }
         copy(window.location.href);
         document.title = 'paste | ' + pasteId;
       }
