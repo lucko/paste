@@ -59,6 +59,11 @@ You can submit content most easily using [curl](https://curl.se/docs/manpage.htm
 ##### 3) From Code
 Send GET/POST/PUT requests to `https://api.pastes.dev/`. More info [below](#pastesdev-api).
 
+##### 4) From Code using Client Libraries
+Recommended client libraries:
+
+* **Python**: [pastes](https://pypi.org/project/pastes/) — minimalistic Python client for pastes.dev API
+
 ___
 
 ### About
