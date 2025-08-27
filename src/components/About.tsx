@@ -30,6 +30,7 @@ export default function About({
 }: {
   setVisible: (show: boolean) => void;
 }) {
+  const official = window.location.hostname === 'localhost';
   const [showTos, setShowTos] = useState<boolean>(false);
 
   if (showTos) {
@@ -47,7 +48,7 @@ export default function About({
         different take on conventional pastebin sites like pastebin.com or
         hastebin.
       </p>
-      {window.location.hostname === 'pastes.dev' && (
+      {official && (
         <>
           <p>
             <b>pastes.dev</b> is the official, publicly accessible paste
@@ -65,7 +66,10 @@ export default function About({
           </p>
           <p>
             To access pastes.dev programmatically, please use the{' '}
-            <a href="https://github.com/lucko/paste#readme" target="_blank">
+            <a
+              href="https://github.com/lucko/paste/blob/master/API.md"
+              target="_blank"
+            >
               API
             </a>
             . :)
@@ -141,7 +145,7 @@ const Tos = ({ setVisible }: { setVisible: (show: boolean) => void }) => {
           abuse or violations of these terms.
         </li>
         <li>
-          <b>No Guarantees:</b> This service is provided "as is" with no
+          <b>No Liability:</b> This service is provided "as is" with no
           warranties. We do not guarantee uptime, data retention, or
           availability.
         </li>
@@ -150,11 +154,10 @@ const Tos = ({ setVisible }: { setVisible: (show: boolean) => void }) => {
         By using pastes.dev, you accept these terms. If you do not agree, please
         do not use the service.
       </p>
+      <h2>Reporting Abuse</h2>
       <p>
-        <b>Reporting Abuse</b>
-        <br />
         If you encounter illegal or malicious content, please report it by email
-        to report-abuse {'<at>'} pastes.dev.
+        to <span>report-abuse@pastes.dev</span>.
       </p>
     </AboutPanel>
   );
@@ -173,6 +176,10 @@ const AboutPanel = styled.div`
 
   color: ${props => props.theme.primary};
   background-color: ${props => props.theme.secondary};
+
+  span {
+    color: ${props => props.theme.logo};
+  }
 `;
 
 const BannerContainer = styled.div`
