@@ -30,7 +30,7 @@ export default function About({
 }: {
   setVisible: (show: boolean) => void;
 }) {
-  const official = window.location.hostname === 'localhost';
+  const official = window.location.hostname === 'pastes.dev';
   const [showTos, setShowTos] = useState<boolean>(false);
 
   if (showTos) {
