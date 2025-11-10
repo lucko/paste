@@ -1,0 +1,115 @@
+-- // MINECRAFT FULL TEXT MODE (ENCRYPTED) //
+-- Autor: Thiago Edición Anti Copy Ultra
+-- Convierte todo el texto del juego (chat, GUI, nombres) al estilo Minecraft
+
+-- 🔒 Bloque aleatorio #1
+local _a = "IrbdkxbdisbdodkdidjxKxwbidvbdksodixnspqWqoeiudbsjdiwbxidbdksldbdjwixbdiw"
+local protectA = math.random(100000,999999).._a..math.random(100000,999999)
+
+-- 🧱 Inicio real del script
+local player = game.Players.LocalPlayer
+
+local function setMinecraftFont(obj)
+	if obj:IsA("TextLabel") or obj:IsA("TextButton") or obj:IsA("TextBox") then
+		obj.Font = Enum.Font.Arcade
+		obj.TextStrokeTransparency = 0
+		obj.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+end
+
+-- 🔒 Bloque aleatorio #2
+local _b = "KwuebxidvisbdkxbdosjskzxiXpwuebdjsidbwoqkxidbjsiwbdxqpwoeidjxbdsKXqpwoeidb"
+local protectB = math.random(100000,999999).._b..math.random(100000,999999)
+
+for _, v in pairs(game:GetDescendants()) do
+	setMinecraftFont(v)
+end
+
+game.DescendantAdded:Connect(function(obj)
+	setMinecraftFont(obj)
+end)
+
+-- 🟩 Chat estilo Minecraft
+local StarterGui = game:GetService("StarterGui")
+StarterGui:SetCore("ChatMakeSystemMessage", {
+	Text = "§a[Minecraft Chat Activado]",
+	Color = Color3.fromRGB(85, 255, 85),
+	Font = Enum.Font.Arcade,
+	TextSize = 20
+})
+
+-- Fondo oscuro del chat (negro 70%)
+local chatFrame = player:WaitForChild("PlayerGui"):FindFirstChild("Chat")
+if chatFrame then
+	for _, v in pairs(chatFrame:GetDescendants()) do
+		if v:IsA("Frame") or v:IsA("TextLabel") then
+			v.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+			v.BackgroundTransparency = 0.3
+		end
+	end
+end
+
+-- 🔒 Bloque aleatorio #3
+local _c = "IwjdxibdisbxodbdidbxlbxkYsjdoqiwbdkxidbdisbxpwoeidjwoxbdiwbdqksnxbqoidbwk"
+local protectC = math.random(100000,999999).._c..math.random(100000,999999)
+
+-- Mensajes de chat verdes
+local ChatService = game:GetService("TextChatService")
+if ChatService and ChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+	for _, channel in pairs(ChatService:GetChildren()) do
+		if channel:IsA("TextChannel") then
+			channel.MessageReceived:Connect(function(message)
+				local props = Instance.new("TextChatMessageProperties")
+				props.PrefixText = "§a" .. message.PrefixText
+				props.Text = "§a" .. message.Text
+				return props
+			end)
+		end
+	end
+end
+
+-- 🧍‍♂️ Nombres estilo Minecraft
+local function styleNameTags(plr)
+	plr.CharacterAdded:Connect(function(char)
+		repeat task.wait() until char:FindFirstChild("Head")
+		local head = char.Head
+		for _, tag in pairs(head:GetChildren()) do
+			if tag:IsA("BillboardGui") then
+				for _, t in pairs(tag:GetDescendants()) do
+					if t:IsA("TextLabel") then
+						t.Font = Enum.Font.Arcade
+						t.TextColor3 = Color3.fromRGB(255, 255, 255)
+						t.TextStrokeTransparency = 0
+					end
+				end
+			end
+		end
+	end)
+end
+
+for _, plr in pairs(game.Players:GetPlayers()) do
+	styleNameTags(plr)
+end
+
+game.Players.PlayerAdded:Connect(function(plr)
+	styleNameTags(plr)
+end)
+
+-- 🔒 Bloque aleatorio #4 (final)
+local _d = "Xkqweidbjsidbwoxpqdbisdkwxidjwbdisoxpqwbxidjskdbwiqpoxbdjsidbkwxidbso"
+local protectD = math.random(100000,999999).._d..math.random(100000,999999)
+
+-- 🧱 Mensaje final
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+local msg = Instance.new("TextLabel", gui)
+msg.AnchorPoint = Vector2.new(0.5, 0.5)
+msg.Position = UDim2.new(0.5, 0.5, 0, 0)
+msg.Size = UDim2.new(0, 600, 0, 100)
+msg.BackgroundTransparency = 1
+msg.Font = Enum.Font.Arcade
+msg.TextColor3 = Color3.fromRGB(255, 255, 255)
+msg.TextStrokeTransparency = 0
+msg.TextScaled = true
+msg.Text = "MINECRAFT MODE ACTIVATED"
+task.wait(3)
+msg:Destroy()
