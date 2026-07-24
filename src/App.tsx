@@ -4,7 +4,6 @@ import About from './components/About.tsx';
 import Editor from './components/Editor';
 import usePreference from './hooks/usePreference.ts';
 import themes, { Themes } from './style/themes.ts';
-import { useQueryRouting } from './util/constants';
 import { loadFromBytebin } from './util/storage';
 
 const INITIAL = Symbol();
@@ -83,10 +82,10 @@ function get404Message(pasteId: string) {
 }
 
 function getPasteIdFromUrl() {
-  if (useQueryRouting) {
-    return new URLSearchParams(window.location.search).get('id') ?? undefined;
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  let path = window.location.pathname;
+  if (path.startsWith(base)) {
+    path = path.substring(base.length);
   }
-
-  const path = window.location.pathname;
   return /^\/[a-zA-Z0-9]+$/.test(path) ? path.substring(1) : undefined;
 }

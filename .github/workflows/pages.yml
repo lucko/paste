@@ -31,8 +31,8 @@ jobs:
       - name: Build
         run: yarn build
         env:
-          #VITE_BYTEBIN_URL: "https://your-bytebin.example.com/"
-          VITE_USE_QUERY_ROUTING: "true" # required for github pages
+          #VITE_BYTEBIN_URL: "https://api.pastes.dev/"
+          VITE_BASE_URL: "/paste/" # Remove this if you set a custom domain
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

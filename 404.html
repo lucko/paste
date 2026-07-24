@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>pastes</title>
+  <script>
+    // GitHub Pages SPA redirect
+    // When GH Pages serves this 404.html for any unmatched path,
+    // we encode the intended URL into a query param and redirect to /.
+    // The index.html will then read it and restore the URL so React Router works.
+    var l = window.location;
+    var base = '%BASE_URL%';
+    var path = l.pathname;
+    if (path.startsWith(base.substring(0, base.length - 1))) {
+      path = path.substring(base.length - 1);
+    }
+    l.replace(
+      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+      base + '?p=' + encodeURIComponent(path + l.search) +
+      (l.hash ? '&h=' + encodeURIComponent(l.hash) : '')
+    );
+  </script>
+</head>
+
+<body></body>
+
+</html>

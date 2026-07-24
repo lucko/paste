@@ -4,7 +4,6 @@ import { RefObject, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import themes, { Themes } from '../style/themes';
-import { useQueryRouting } from '../util/constants';
 import { languages } from '../util/highlighting';
 import { saveToBytebin } from '../util/storage';
 import Button from './Button';
@@ -61,15 +60,9 @@ export default function EditorControls({
       setSaving(false);
       setRecentlySaved(true);
       if (pasteId) {
-        if (useQueryRouting) {
-          history.replace({
-            search: `?id=${pasteId}`,
-          });
-        } else {
-          history.replace({
-            pathname: pasteId,
-          });
-        }
+        history.replace({
+          pathname: (import.meta.env.BASE_URL + pasteId).replace(/\/+/, '/'),
+        });
         copy(window.location.href);
         document.title = 'paste | ' + pasteId;
       }
@@ -103,7 +96,7 @@ export default function EditorControls({
     resetFunction.current();
     setLanguage('plain');
     history.replace({
-      pathname: '/',
+      pathname: import.meta.env.BASE_URL,
       hash: '',
     });
     document.title = 'paste';
