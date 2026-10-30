@@ -10,9 +10,10 @@ paste has a simple HTTP API which can be used to read and write pastes programma
 > 
 > * You must **provide a  `User-Agent` header** to uniquely identify your application in all requests. This should include the application name and contact information, e.g. `ExampleApp (github.com/ExampleUser/ExampleApp)` or `MyExampleScript (github.com/ExampleUser)`.
 > * You must **only upload content when prompted by a user action**, e.g. a button click or command line input. Automated or scheduled uploads are not allowed.
-> * An additional **terms of service** applies. In summary:
+> * A **terms of service** applies. In summary:
 >   * No Illegal Use *(no illegal, harmful or unlawful content)*
->   * No Malicious Content *(no malware, phishing, personal data without consent, etc.)*
+>   * No Malicious Content *(no malware, phishing, etc.)*
+>   * No Personal Data *(no personal data, secrets, passwords, tokens, etc.)*
 >   * Content Responsibility *(you are responsible for what you post)*
 >   * Moderation *(we reserve the right to remove content or block access)*
 >   * No Liability *(the service is provided "as is" without warranties)*

@@ -2,44 +2,31 @@ import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import Button from './Button.tsx';
 
-const CloseButton = ({
-  setVisible,
-}: {
+interface AboutProps {
   setVisible: (show: boolean) => void;
-}) => {
-  const close = useCallback(() => {
+}
+
+export default function About({ setVisible }: AboutProps) {
+  const official = window.location.hostname === 'pastes.dev';
+  const [notice, setNotice] = useState<'tos' | 'privacy' | null>(null);
+
+  const closeNotice = useCallback(() => {
+    setNotice(null);
+  }, [setNotice]);
+
+  const closeAbout = useCallback(() => {
     setVisible(false);
   }, [setVisible]);
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        top: '5px',
-        right: '5px',
-      }}
-    >
-      <Button style={{ padding: '5px' }} onClick={close}>
-        [X]
-      </Button>
-    </div>
-  );
-};
 
-export default function About({
-  setVisible,
-}: {
-  setVisible: (show: boolean) => void;
-}) {
-  const official = window.location.hostname === 'pastes.dev';
-  const [showTos, setShowTos] = useState<boolean>(false);
-
-  if (showTos) {
-    return <Tos setVisible={setShowTos} />;
+  if (notice == 'tos') {
+    return <Tos close={closeNotice} />;
+  } else if (notice == 'privacy') {
+    return <Privacy close={closeNotice} />;
   }
 
   return (
     <AboutPanel>
-      <CloseButton setVisible={setVisible} />
+      <CloseButton callback={closeAbout} />
       <BannerContainer>
         <Banner>{'{paste}'}</Banner>
       </BannerContainer>
@@ -56,11 +43,21 @@ export default function About({
             <a
               href="#"
               onClick={e => {
-                setShowTos(true);
+                setNotice('tos');
                 e.preventDefault();
               }}
             >
               Terms of Service
+            </a>{' '}
+            and{' '}
+            <a
+              href="#"
+              onClick={e => {
+                setNotice('privacy');
+                e.preventDefault();
+              }}
+            >
+              Privacy Policy
             </a>
             .
           </p>
@@ -77,13 +74,7 @@ export default function About({
           <p>
             Please{' '}
             <b>
-              <a
-                href="#"
-                onClick={e => {
-                  setShowTos(true);
-                  e.preventDefault();
-                }}
-              >
+              <a href="mailto:report-abuse@pastes.dev" target="_blank">
                 report
               </a>
             </b>{' '}
@@ -114,11 +105,14 @@ export default function About({
   );
 }
 
-const Tos = ({ setVisible }: { setVisible: (show: boolean) => void }) => {
+const Tos = ({ close }: { close: () => void }) => {
   return (
     <AboutPanel>
-      <CloseButton setVisible={setVisible} />
+      <CloseButton callback={close} />
       <h1>Terms of Service</h1>
+      <p>
+        <em>Last updated: 30 October 2026</em>
+      </p>
       <p>
         Welcome to pastes.dev. By using this service, you agree to the following
         terms:
@@ -131,8 +125,14 @@ const Tos = ({ setVisible }: { setVisible: (show: boolean) => void }) => {
         </li>
         <li>
           <b>No Malicious Content:</b> Do not upload or share content intended
-          to harm others, including but not limited to malware, phishing links,
-          or personal data without consent.
+          to harm others, including but not limited to malware or phishing
+          links.
+        </li>
+        <li>
+          <b>No Personal Data:</b> Do not upload personal data about other
+          people, or secrets such as passwords, API keys or tokens. Pastes can
+          be viewed by anyone with the link, and may be copied or cached by
+          others before they expire.
         </li>
         <li>
           <b>Content Responsibility:</b> You are solely responsible for the
@@ -156,10 +156,79 @@ const Tos = ({ setVisible }: { setVisible: (show: boolean) => void }) => {
       </p>
       <h2>Reporting Abuse</h2>
       <p>
-        If you encounter illegal or malicious content, please report it by email
-        to <span>report-abuse@pastes.dev</span>.
+        If you encounter content that violates these terms, please report it by
+        email to{' '}
+        <a href="mailto:report-abuse@pastes.dev" target="_blank">
+          report-abuse@pastes.dev
+        </a>{' '}
+        so that it can be removed.
       </p>
     </AboutPanel>
+  );
+};
+
+const Privacy = ({ close }: { close: () => void }) => {
+  return (
+    <AboutPanel>
+      <CloseButton callback={close} />
+      <h1>Privacy Policy</h1>
+      <p>
+        <em>Last updated: 30 October 2026</em>
+      </p>
+      <h2>What We Process</h2>
+      <ul>
+        <li>
+          <b>Pastes:</b> Content you upload. <b>Pastes are public.</b> Anyone
+          with the link can view or download them. Do not upload personal data
+          or secrets (passwords, tokens).
+        </li>
+        <li>
+          <b>Request Logs:</b> Technical data (IP address, user agent,
+          timestamps) processed for security, rate-limiting, and abuse
+          prevention.
+        </li>
+      </ul>
+      <h2>Service Providers</h2>
+      <p>
+        We use third-party hosting, storage, and CDN providers in Germany, the
+        Netherlands, and globally, relying on GDPR-compliant safeguards (e.g.,
+        Standard Contractual Clauses) for international transfers. We do not
+        sell your data or use it for advertising.
+      </p>
+      <h2>Retention</h2>
+      <p>
+        Pastes are automatically deleted after a limited period (currently up to
+        180 days for web pastes; 30 days for API pastes). Logs are kept only as
+        necessary. We cannot recall third-party cached copies.
+      </p>
+      <h2>Your Rights</h2>
+      <p>
+        Under UK/EU GDPR, processing is based on our legitimate interests in
+        securing and delivering the service. You may have rights to access,
+        delete, or object to processing. To request removal or exercise rights,{' '}
+        <a href="mailto:report-abuse@pastes.dev" target="_blank">
+          contact us
+        </a>{' '}
+        with the paste link. We may update this policy by publishing a revised
+        version.
+      </p>
+    </AboutPanel>
+  );
+};
+
+const CloseButton = ({ callback }: { callback: () => void }) => {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: '5px',
+        right: '5px',
+      }}
+    >
+      <Button style={{ padding: '5px' }} onClick={callback}>
+        [X]
+      </Button>
+    </div>
   );
 };
 
