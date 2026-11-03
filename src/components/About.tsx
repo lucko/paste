@@ -15,7 +15,7 @@ const notices = { tos: Tos, privacy: Privacy };
 type NoticeKey = keyof typeof notices;
 
 export default function About({ setVisible }: AboutProps) {
-  const official = true || window.location.hostname === 'pastes.dev';
+  const official = window.location.hostname === 'pastes.dev';
   const [notice, setNotice] = useState<NoticeKey | null>(null);
 
   useEffect(() => {
