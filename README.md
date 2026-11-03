@@ -6,6 +6,9 @@
 
 Anyone can use paste! The official/public instance can be accessed using the endpoints listed below, but you can also [host your own](#self-hosting) if you like!
 
+> [!NOTE]
+> Use of the official instance (https://pastes.dev) is subject to the [Terms of Service](src/content/tos.md) and [Privacy Policy](src/content/privacy.md).
+
 ##### 1) In a Web Browser
 Just go to https://pastes.dev!
 
