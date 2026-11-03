@@ -17,11 +17,11 @@ import { ResetFunction } from './Editor';
 import { loader } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
 
-import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
-import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker';
-import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker';
-import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker';
-import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+import editorWorker from 'monaco-editor/editor/editor.worker?worker';
+import cssWorker from 'monaco-editor/language/css/css.worker?worker';
+import htmlWorker from 'monaco-editor/language/html/html.worker?worker';
+import jsonWorker from 'monaco-editor/language/json/json.worker?worker';
+import tsWorker from 'monaco-editor/language/typescript/ts.worker?worker';
 
 self.MonacoEnvironment = {
   getWorker(_: string, label: string): Promise<Worker> | Worker {
@@ -95,7 +95,7 @@ export default function EditorTextArea({
     monaco.languages.register({ id: 'diff' });
     monaco.languages.setMonarchTokensProvider('diff', diffLanguage);
 
-    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+    monaco.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: true,
       noSyntaxValidation: true,
     });

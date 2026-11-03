@@ -15,7 +15,7 @@
     "@monaco-editor/react": "^4.8.0-rc.3",
     "copy-to-clipboard": "^3.3.3",
     "history": "^5.3.0",
-    "monaco-editor": "^0.55.1",
+    "monaco-editor": "^0.57.0",
     "monaco-themes": "^0.4.8",
     "pako": "^2.1.0",
     "react": "^19.2.4",
