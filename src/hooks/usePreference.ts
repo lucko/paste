@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState, type Dispatch, type SetStateAction } from 'react';
 
 // hook used to load "preference" settings from local storage, or fall back to a default value.
 export default function usePreference<T>(

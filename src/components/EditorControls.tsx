@@ -1,14 +1,14 @@
 import copy from 'copy-to-clipboard';
 import history from 'history/browser';
-import { RefObject, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, type RefObject } from 'react';
 import styled from 'styled-components';
 
-import themes, { Themes } from '../style/themes';
+import themes, { type Themes } from '../style/themes';
 import { useQueryRouting } from '../util/constants';
 import { languages } from '../util/highlighting';
 import { saveToBytebin } from '../util/storage';
 import Button from './Button';
-import { ResetFunction } from './Editor';
+import type { ResetFunction } from './Editor';
 import MenuButton from './MenuButton';
 
 export interface EditorControlsProps {

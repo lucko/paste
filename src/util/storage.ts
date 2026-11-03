@@ -1,5 +1,6 @@
 import { gzip } from 'pako';
-import MIMEType from 'whatwg-mimetype';
+import { MIMEType } from 'whatwg-mimetype';
+
 import { bytebinUrl, postUrl } from './constants';
 import { languageIds } from './highlighting';
 

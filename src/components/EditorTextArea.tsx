@@ -1,27 +1,31 @@
 import Editor, {
-  BeforeMount,
-  Monaco,
-  OnChange,
-  OnMount,
+  loader,
+  type BeforeMount,
+  type Monaco,
+  type OnChange,
+  type OnMount,
 } from '@monaco-editor/react';
 import history from 'history/browser';
-import { RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import styled, { useTheme } from 'styled-components';
-import themes, { Theme } from '../style/themes';
-
 import type { editor } from 'monaco-editor';
-import { diffLanguage } from '../util/languages/diff';
-import { logLanguage } from '../util/languages/log';
-import { ResetFunction } from './Editor';
-
-import { loader } from '@monaco-editor/react';
 import * as monaco from 'monaco-editor';
-
 import editorWorker from 'monaco-editor/editor/editor.worker?worker';
 import cssWorker from 'monaco-editor/language/css/css.worker?worker';
 import htmlWorker from 'monaco-editor/language/html/html.worker?worker';
 import jsonWorker from 'monaco-editor/language/json/json.worker?worker';
 import tsWorker from 'monaco-editor/language/typescript/ts.worker?worker';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react';
+import styled, { useTheme } from 'styled-components';
+
+import themes, { type Theme } from '../style/themes';
+import { diffLanguage } from '../util/languages/diff';
+import { logLanguage } from '../util/languages/log';
+import type { ResetFunction } from './Editor';
 
 self.MonacoEnvironment = {
   getWorker(_: string, label: string): Promise<Worker> | Worker {

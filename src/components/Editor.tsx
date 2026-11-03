@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 
 import usePreference from '../hooks/usePreference';
-import { Themes } from '../style/themes.ts';
+import type { Themes } from '../style/themes.ts';
 import EditorControls from './EditorControls';
 import EditorGlobalStyle from './EditorGlobalStyle';
 import EditorTextArea from './EditorTextArea';

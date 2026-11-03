@@ -1,6 +1,9 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
+
 import Button from './Button.tsx';
+
+const currentYear = new Date().getFullYear();
 
 interface AboutProps {
   setVisible: (show: boolean) => void;
@@ -88,7 +91,7 @@ export default function About({ setVisible }: AboutProps) {
         </a>{' '}
         is free & open source on GitHub.
         <br />
-        Copyright &copy; 2021-{new Date().getFullYear()}{' '}
+        Copyright &copy; 2021-{currentYear}{' '}
         <a href="https://github.com/lucko" target="_blank">
           lucko
         </a>{' '}

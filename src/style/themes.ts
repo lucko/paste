@@ -1,7 +1,9 @@
+import {
+  flavors,
+  type CatppuccinFlavor,
+  type ColorFormat,
+} from '@catppuccin/palette';
 import type { editor } from 'monaco-editor';
-
-import { CatppuccinFlavor, ColorFormat, flavors } from '@catppuccin/palette';
-
 // @ts-expect-error Alias import added in vite.config.ts
 import dracula from 'monaco-themes/themes/Dracula.json';
 // @ts-expect-error Alias import added in vite.config.ts

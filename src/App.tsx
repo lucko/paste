@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { ThemeProvider } from 'styled-components';
+
 import About from './components/About.tsx';
 import Editor from './components/Editor';
 import usePreference from './hooks/usePreference.ts';
-import themes, { Themes } from './style/themes.ts';
+import themes, { type Themes } from './style/themes.ts';
 import { useQueryRouting } from './util/constants';
 import { loadFromBytebin } from './util/storage';
 
